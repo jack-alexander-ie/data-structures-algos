@@ -1,3 +1,5 @@
+import operator
+
 class LinkedListNode:
 
     def __init__(self, data):
@@ -39,6 +41,7 @@ class Stack:
         return self.num_elements == 0
 
 
+# Implementation for assessing Polish Notation
 def evaluate_post_fix(input_list):
     """
     Evaluate the postfix expression to find the answer
@@ -48,8 +51,20 @@ def evaluate_post_fix(input_list):
     Returns:
        int: Postfix expression solution
     """
-    # TODO: Iterate over elements
 
-    # TODO: Use stacks to control the element positions
+    elements = {'+': operator.add, '-': operator.sub, '*': operator.mul, '/': operator.floordiv}
 
-    pass
+    stack = Stack()
+
+    for element in input_list:
+        if element in elements:
+            second = stack.pop()
+            first = stack.pop()
+            output = int(elements[element](first, second))
+            stack.push(output)
+        else:
+            stack.push(int(element))
+
+    return stack.pop()
+
+
