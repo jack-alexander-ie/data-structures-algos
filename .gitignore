@@ -1,6 +1,6 @@
 
 .idea/
-venv
+venv/
 *.zip
 
 # Byte-compiled / optimized / DLL files
