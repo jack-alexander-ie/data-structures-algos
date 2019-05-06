@@ -1,0 +1,183 @@
+
+def pop(self):
+
+	""" Return the first node's value and remove it from the list. """
+        
+	if self.head is None:
+		return
+
+	if self.head.next is None:
+		value = self.head.value
+		self.head = None
+		return value
+
+	node = self.head
+	value = self.node.value
+	
+	next = self.head.next
+	self.head = next
+
+	return value
+	
+
+def insert(self, value, pos):
+        """ Insert value at pos position in the list. If pos is larger than the
+            length of the list, append to the end of the list. """
+
+	if self.head is None:
+		self.head = Node(value)
+		return
+
+	count = 0
+	current_node = self.head
+	prev_node = current_node
+
+	while current_node:
+
+		if pos is count:
+			# Insert Value
+			new_node = Node(value)
+			new_node.next = prev_node.next
+			prev_node.next = new_node
+			return
+
+		else:
+			prev_node = current_node
+			current_node = current_node.next
+			count += 1
+	
+
+	if current_node.next is None and pos > count:
+
+		self.append(value)
+
+
+def reversed(linked_list):
+
+	current_node = linked_list.head
+	
+	# If only one node is present
+	if current_node.next is None:
+
+		return linked_list
+
+
+	# If two elements
+	next_node = current_node.next
+	current_node.next = None
+
+	# For > 2 values
+	if next_node.next is None:
+		next_node.next = current_node
+		linked_list.head = next_node
+		return linked_list
+
+
+	# If multiple elements
+	following_node = next_node.next
+	next_node.next = current
+	
+	current_node = next_node
+	next_node = following_node
+	following_node = next_node.next
+
+	while current_node:
+		
+		# Link next node back to current/previous node
+		next_node.next = current_node
+
+		# Update current node to move forward
+		current_node = next_node
+
+		# Check to see if node is ahead of it
+		if current_node.next is None:
+			linked_list.head = current_node
+			return linked_list
+		else:
+			next_node = current_node.next
+
+		# Check if tail is reached
+		if next_node.next is None:
+			next_node.next = current_node
+			linked_list.head = next_node
+			return list
+		else:
+
+			following_node = next_node.next
+
+			
+		
+def iscircular(linked_list):
+	"""
+	Determine wether the Linked List is circular or not
+
+	Args:
+	   linked_list(obj): Linked List to be checked
+	Returns:
+	   bool: Return True if the linked list is circular, return False otherwise
+	"""
+    
+	slow_node = linked_list.head
+	fast_node = slow_node.next.next
+
+	while slow_node:
+
+		if slow_node is fast_node:
+			return True
+		else:
+			slow_node = slow_node.next
+			fast_node = fast_node.next
+
+	return False
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

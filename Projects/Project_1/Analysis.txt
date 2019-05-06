@@ -1,0 +1,112 @@
+Task0.py:
+
+	Excluding the print() and .format() statements, two main operations are performed: 
+
+		• Retrieve first entry	=> texts[0]	=> O(1)
+		• Retrieve last entry	=> calls[-1]	=> O(1)
+
+	Accessing values in a list with known index values is performed in constant time.
+
+	The overall worst case sum can be expressed as 2.
+
+	Worst case time complexity can be said to be O(1) as this algorithm will always be performed in constant 
+	time, regardless of the list input size.
+
+
+Task1.py:
+
+	Excluding the print() and .format() statements, several operations are performed:
+
+		• 'for' loop	=> for record in chained_list		=> O(n)
+		• Chain lists	=> chain(texts, calls)			=> O(1)
+		• Add to set	=> individual_numbers.add(element)	=> Lookup: O(1), Insert: O(1)
+		• List length	=> len(individual_numbers)		=> O(1)
+		
+	The dominant contributor to this algorithm's runtime is the size of the given list. The for loop will grow
+	linearly to the size of the input list.
+
+	Chaining list is performed in constant time, as the last element of the first list is just chained the the 
+	first element of the next list.
+
+	As sets are implemented as a hash table, all lookup, insert and delete operations are performed in O(1) time.
+	In the worst case, a lookup and an insert will have to be performed if an element does not exist in a set, but
+	in some cases, where an element does belong to a set, only a lookup will have to be performed.
+
+	Lastly, getting the length of a list is performed in constant time.
+
+	The overall worst case sum can be expressed as O(n) + 4.
+
+	As the dominant contributor to the algorithms time complexity is the list size, the worst case scenario for 
+	this algorithm is O(n).
+
+
+Task2.py:
+
+	Excluding the print() and .format() statements, several operations are performed:
+
+		• 'for' loop	=> for call in calls			=> O(n)
+		• Dict ops	=> all_calls[value] += duration		=> Lookup: O(1), Insert: O(1), Update: O(1)
+		• Longest data	=> max(list.items(), key=lambda x: x[1])=> O(n)
+		• Conditional 	=> if time_spent > longest_time		=> O(1)
+
+	The dominant contributor to this algorithm's runtime is the size of the input list. The for loop will grow
+	linearly to the size of the input list. The 'for' loop can be expressed as O(n).
+
+	The lookup, insert and value update operations of the default dict are all performed in constant time. In the 
+	worst case scenario, three operations are performed: lookup, insert and value update. As all are performed in
+	constant time, the sum can be expressed as O(3).
+
+	The use of the max() function was suggested by a reviewer, and the solution for it was found here:
+	https://stackoverflow.com/questions/268272/getting-key-with-maximum-value-in-dictionary/35256685. The worst 
+	case scenario for the use of max() is O(n) as it has to check every element. The lambda just returns the value
+	at that key and is performed in O(1) time.
+
+	As the dominant contributor to the algorithms time complexity is the list size, the worst case scenario for 
+	this algorithm can be expressed as O(n).
+
+
+Task3.py:
+	
+	The 'for' loop will grow linearly to the size of the input. The conditionals within the for loop add, in the 
+	worst case scenario, 9 extra computations. The worst case is a the situation when a mobile digit is being tested
+	against the list of valid prefix numbers. Each of these 9 computations has its own algorithmic complexity, but as
+	the test values are fixed, they add only a marginal amount of overhead and do not contribute much to the runtime.
+
+	The 'for' loop print statement is O(n), as the number of times it has to run depends on the input list size.
+
+	Finally, the runtime of the sorted() function can be expressed as O(n log n) as it's algorithm is an 
+	implementation of Timsort.
+	
+	A simplified overall worst case sum can be expressed as O(2n) + O(n log n) + 9, or O(n) + O(n log n).
+
+	The dominant contributor to this algorithm's runtime is the sorting of the final list. While the 'for' loop 
+	grows the algorithm's runtime linearly, this will be quickly overtaken by the sorting alrorithm's O(n log n)
+	runtime. Increasing the size of the input list will quickly increase runtime of the sorting algorithm.
+
+	The biggest expression that will effect the runtime is O(n log n).
+
+
+Task4.py:
+
+	Both the 1st and second 'for' loops will grow linearly to the size of the input list, with a runtime of O(n).
+
+ 	Regarding the first for loop, only one computation is performed and and is in O(1). The second for loop is 
+	similar in that it also has a small number of individual computations, each of which are performed in O(1) time.
+
+	The third 'for' loop has several computations but again, it's overall runtime is also linear, with a time 
+	complexity of O(n).
+
+	The last 'for' loop which deals with the printing of numbers also has a time complexity of O(n).
+
+	Finally, the runtime of the sorted() function can be expressed as O(n log n) as it's algorithm is an 
+	implementation of Timsort.
+
+	A simplified overall worst case sum can be expressed as O(4n) + O(n log n), or O(n) + O(n log n)
+
+	The dominant contributor to this algorithm's runtime is the sorting of the telemarketers list. While the 'for'
+	loops grow the algorithm's runtime linearly, this will be quickly overtaken by the sorting alrorithm's O(n log n)
+	runtime. Increasing the size of the input list will quickly increase runtime of the sorting algorithm.
+
+	The biggest expression that will effect the runtime is O(n log n).
+
+
