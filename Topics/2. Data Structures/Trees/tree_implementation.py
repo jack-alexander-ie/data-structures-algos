@@ -1,23 +1,3 @@
-"""
-
-    'Traversing' a tree: visiting all nodes once
-
-    Used for: search, insert, delete
-
-    Two Types:
-
-        1. Depth First Search (DFS)
-        2. Breadth first Search (BFS)
-
-    DFS:
-
-        1. Pre-order
-        2. In-order
-        3. Post-order
-
-"""
-
-
 class Node:
 
     def __init__(self, value=None):
