@@ -1,0 +1,28 @@
+from copy import deepcopy
+
+def permute(l):
+
+	perms = []
+
+	if len(l) is 0:
+		perms.append([])
+
+	else:
+
+		first, rest = l[0], slice(1, None)
+
+		sub_permutations = permute(l[rest])
+		
+		for permutation in sub_permutations:
+
+			# Iterate over the permutation itself, not the list of sub-permutations
+			for index in range(len(permutation) + 1):
+
+				deep_perm = deepcopy(permutation)
+
+				deep_perm.insert(index, first)
+
+				perms.append(deep_perm)
+
+	return perms
+		
