@@ -47,6 +47,7 @@ class Tree:
 
 # Let's define a stack to help keep track of the tree nodes
 class Stack:
+
     def __init__(self):
         self.list = list()
 
@@ -76,8 +77,34 @@ class Stack:
             return "<stack is empty>"
 
 
-def pre_order_with_stack_buggy(tree):
+class State:
 
+    def __init__(self, node):
+        self.node = node
+        self.visited_left = False
+        self.visited_right = False
+
+    def get_node(self):
+        return self.node
+
+    def get_visited_left(self):
+        return self.visited_left
+
+    def get_visited_right(self):
+        return self.visited_right
+
+    def set_visited_left(self):
+        self.visited_left = True
+
+    def set_visited_right(self):
+        self.visited_right = True
+
+    def __repr__(self):
+        s = f"""{self.node} visited_left: {self.visited_left} visited_right: {self.visited_right}"""
+        return s
+
+
+def pre_order_with_stack_buggy(tree):
     visit_order = list()
     stack = Stack()
 
@@ -88,41 +115,24 @@ def pre_order_with_stack_buggy(tree):
 
     visit_order.append(node.get_value())
 
-    count = 0
-    loop_limit = 7
-
-    while node and count < loop_limit:
-
-        print(f"""loop count: {count} current node: {node} stack: {stack}""")
-
-        count += 1
+    while node:
 
         # Issue here when going back up
         # node.has_left_child may always be true
         # Check to make sure it's not already been checked
-        if node.has_left_child():
+        if node.has_left_child() and node.get_left_child().value not in visit_order:
 
-            if node.get_left_child().value in visit_order:
-                # Implement check here
-                stack.pop()
+            node = node.get_left_child()
+            stack.push(node)
+            node = stack.top()
+            visit_order.append(node.get_value())
 
-            else:
-                node = node.get_left_child()
-                stack.push(node)
-                node = stack.top()
-                visit_order.append(node.get_value())
+        elif node.has_right_child() and node.get_right_child().value not in visit_order:
 
-        elif node.has_right_child():
-
-            if node.get_right_child.value in visit_order:
-                # Implement change here
-                stack.pop()
-
-            else:
-                node = node.get_right_child()
-                stack.push(node)
-                node = stack.top()
-                visit_order.append(node.get_value())
+            node = node.get_right_child()
+            stack.push(node)
+            node = stack.top()
+            visit_order.append(node.get_value())
 
         else:
 
@@ -130,9 +140,55 @@ def pre_order_with_stack_buggy(tree):
 
             if not stack.is_empty():
                 node = stack.top()
-
             else:
                 node = None
+
+    return visit_order
+
+
+def pre_order_with_stack(tree, debug_mode=False):
+    visit_order = list()
+    stack = Stack()
+
+    node = tree.get_root()
+    visit_order.append(node.get_value())
+
+    # Create a state and push it onto the node instead of raw node
+    state = State(node)
+    stack.push(state)
+
+    count = 0
+
+    while node:
+
+        if debug_mode:
+            print(f"""loop count: {count} current node: {node} stack: {stack}""")
+
+        count += 1
+
+        if node.has_left_child() and not state.get_visited_left():
+            state.set_visited_left()
+            node = node.get_left_child()
+            visit_order.append(node.get_value())
+            state = State(node)
+            stack.push(state)
+
+        elif node.has_right_child() and not state.get_visited_right():
+            state.set_visited_right()
+            node = node.get_right_child()
+            visit_order.append(node.get_value())
+            state = State(node)
+
+        else:
+            stack.pop()
+            if not stack.is_empty():
+                state = stack.top()
+                node = state.get_node()
+            else:
+                node = None
+
+    if debug_mode:
+        print(f"""loop count: {count} current node: {node} stack: {stack}""")
 
     return visit_order
 
@@ -142,4 +198,6 @@ tr.get_root().set_left_child(Node("banana"))
 tr.get_root().set_right_child(Node("cherry"))
 tr.get_root().get_left_child().set_left_child(Node("dates"))
 
-pre_order_with_stack_buggy(tr)
+# Fixed but not the way it should be
+# pre_order_with_stack_buggy(tr)
+# pre_order_with_stack(tr, debug_mode=True)
