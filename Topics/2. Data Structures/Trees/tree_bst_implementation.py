@@ -119,35 +119,22 @@ class Tree:
 
     def search(self, value):
 
-        root = self.root
+        node = self.root
 
-        hit = False
+        while node:
 
-        def traverse(node):
+            if node.value == value:
+                return True
 
-            if node:
+            elif value < node.value:
 
-                print()
-                print('node value:', node.value)
-                print('value:', value)
-                print()
+                node = node.get_left_child()
 
-                if node.value == value:
-                    hit = True
+            elif value > node.value:
 
-                elif value < node.value:
+                node = node.get_right_child()
 
-                    node = node.get_left_child()
-                    traverse(node)
-
-                elif value > node.value:
-
-                    node = node.get_right_child()
-                    traverse(node)
-
-        traverse(root)
-
-        return hit
+        return False
 
     def __repr__(self):
         level = 0
@@ -159,7 +146,7 @@ class Tree:
 
             node, level = q.deq()
 
-            if node == None:
+            if node is None:
                 visit_order.append(("<empty>", level))
                 continue
             visit_order.append((node, level))
