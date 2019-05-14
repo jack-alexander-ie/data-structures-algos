@@ -89,10 +89,83 @@ class Tree:
         else:
             return 1
 
+    def insert_with_loop(self, new_value):
+
+        new_node = Node(new_value)
+
+        # Check to see if tree is empty
+        if self.root is None:
+            self.root = new_node
+            return
+
+        node = self.root
+
+        while True:
+
+            comparison = self.compare(node, new_node)
+
+            if comparison is 0:
+                # Overwrite old value
+                node.set_value(new_node.get_value())
+                break
+
+            elif comparison is -1:
+
+                if node.get_left_child() is None:
+                    node.set_left_child(new_node)
+                    break
+                else:
+                    node = node.get_left_child()
+
+            elif comparison is 1:
+
+                if node.get_right_child() is None:
+                    node.set_right_child(new_node)
+                    break
+                else:
+                    node = node.get_right_child()
+
+    def insert_with_recursion(self, value):
+
+        insert_new_node = Node(value)
+
+        if self.root is None:
+            self.root = insert_new_node
+            return
+
+        root = self.root
+
+        def traverse(node, new_node):
+
+            if node:
+
+                comparison = self.compare(node, new_node)
+
+                if comparison is 0:
+                    # Overwrite existing value
+                    node.set_value(new_node.get_value())
+                    return
+
+                elif comparison is -1:
+
+                    if node.get_left_child() is None:
+                        node.set_left_child(new_node)
+                    else:
+                        traverse(node.get_left_child(), new_node)
+
+                elif comparison is 1:
+
+                    if node.get_right_child() is None:
+                        node.set_right_child(new_node)
+                    else:
+                        traverse(node.get_right_child(), new_node)
+
+        traverse(root, insert_new_node)
+
     def insert(self, new_value):
         new_node = Node(new_value)
         node = self.get_root()
-        if node == None:
+        if node is None:
             self.root = new_node
             return
 
@@ -136,6 +209,55 @@ class Tree:
 
         return False
 
+    def delete(self, value):
+
+        # Base Check
+        if self.root is None:
+            return self.root
+
+        node = self.root
+        parent = node
+
+        while node:
+
+            if node.value == value:
+
+                # If node is a leaf
+                if node.get_left_child() is None and node.get_right_child() is None:
+
+                    # Check which branch the node belongs to
+                    if node.value is parent.get_left_child().value:
+                        parent.set_left_child(None)
+                    else:
+                        parent.set_right_child(None)
+                    break
+
+                # If node has two children
+                elif node.get_left_child() is not None and node.get_right_child() is not None:
+                    print('\n Node has two children \n')
+                    break
+
+                # If node has one child
+                else:
+                    if node.get_left_child() is not None:
+                        if node is parent.get_left_child():
+                            parent.set_left_child(node.get_left_child())
+                    else:
+                        parent.set_right_child(node.get_right_child())
+                    break
+
+            elif value < node.value:
+
+                parent = node
+                node = node.get_left_child()
+
+            elif value > node.value:
+
+                parent = node
+                node = node.get_right_child()
+
+        return False
+
     def __repr__(self):
         level = 0
         q = Queue()
@@ -173,12 +295,33 @@ class Tree:
         return s
 
 
+# tree = Tree()
+# tree.insert_with_loop(5)
+# tree.insert_with_loop(6)
+# tree.insert_with_loop(4)
+# tree.insert_with_loop(2)
+# tree.insert_with_loop(5)  # insert duplicate
+# print('Looped Insert:', tree)
+
+# tree = Tree()
+# tree.insert_with_recursion(5)
+# tree.insert_with_recursion(6)
+# tree.insert_with_recursion(4)
+# tree.insert_with_recursion(2)
+# tree.insert_with_recursion(5)  # insert duplicate
+# print('Recursive Insert:', tree)
+
+# Tree Search
 tree = Tree()
 tree.insert(5)
 tree.insert(6)
 tree.insert(4)
 tree.insert(2)
+tree.insert(7)
 
-print(f"""search for 8: {tree.search(8)}""")
-print(f"""search for 2: {tree.search(2)}""")
+# print(f"""search for 8: {tree.search(8)}""")
+# print(f"""search for 2: {tree.search(2)}""")
 # print(tree)
+
+tree.delete(5)
+print(tree)
