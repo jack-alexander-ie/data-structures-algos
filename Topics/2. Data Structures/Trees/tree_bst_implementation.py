@@ -76,7 +76,7 @@ class Tree:
     def get_root(self):
         return self.root
 
-    def compare(self, node, new_node):
+    def compare(self, node: Node, new_node: Node):
         """
         0 means new_node equals node
         -1 means new node less than existing node
@@ -135,7 +135,7 @@ class Tree:
 
         root = self.root
 
-        def traverse(node, new_node):
+        def traverse(node: Node, new_node: Node):
 
             if node:
 
