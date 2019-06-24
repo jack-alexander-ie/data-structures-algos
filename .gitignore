@@ -159,3 +159,4 @@ crashlytics-build.properties
 
 staticfiles
 .env
+testdir/
