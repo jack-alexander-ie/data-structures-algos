@@ -104,31 +104,3 @@ class LRUCache:
         self.size -= 1
         del self.hash_table[old_tail.key]
         return old_tail
-
-
-def print_vals(node):
-    while node:
-        print('value:', node.value)
-        node = node.next
-    # print()
-
-
-def print_dict(items):
-    for key, value in items:
-        print('Key:', key)
-
-
-our_cache = LRUCache(5)
-
-our_cache.set(1, 1)
-our_cache.set(2, 2)
-our_cache.set(3, 3)
-our_cache.set(4, 4)
-our_cache.set(5, 5)
-
-our_cache.get(1)
-
-our_cache.set(6, 6)
-
-# print_vals(our_cache.head)
-# print_dict(our_cache.hash_table.items())
