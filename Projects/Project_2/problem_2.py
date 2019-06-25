@@ -1,17 +1,3 @@
-"""
-For this problem, the goal is to write code for finding all files under a directory (and all directories beneath it)
-that end with ".c"
-
-Python's os module will be useful—in particular, you may want to use the following resources:
-
-    os.path.isdir(path)
-    os.path.isfile(path)
-    os.listdir(directory)
-    os.path.join(...)
-
-    TODO: Add test cases
-"""
-
 import os
 
 
