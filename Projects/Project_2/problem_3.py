@@ -1,6 +1,5 @@
 """
     TODO: Wrap into class
-
     TODO: Test Cases
         1. Empty string
         2. Single character
@@ -30,7 +29,6 @@ class HuffmanNode:
 def get_frequency(data: str) -> dict:
     """
     Counts frequency of characters in a string.
-
     :param data: string to analyse
     :return: dict with characters as keys and their frequencies as values
     """
@@ -46,7 +44,6 @@ def get_frequency(data: str) -> dict:
 def make_heap(data: dict) -> list:
     """
     Converts a dict to a sorted list of tuples.
-
     :param data: dict with characters as key and their frequency as values
     :return: a list of sorted key/value pairs as tuples
     """
@@ -56,7 +53,6 @@ def make_heap(data: dict) -> list:
 def make_nodes(nodes_list: list) -> list:
     """
     Converts a list of tuples to a list of nodes
-
     :param nodes_list: list of tuples
     :return: list of nodes
     """
@@ -66,10 +62,9 @@ def make_nodes(nodes_list: list) -> list:
     return nodes
 
 
-def build_tree(heap: list) -> list:
+def build_tree(heap: list) -> HuffmanNode:
     """
-    Builds a tree from a sorted heap by merging nodes
-
+    Builds a tree from a sorted heap by merging nodes.
     :param heap: takes in a sorted list of Huffman Nodes
     :return: the tree's root node
     """
@@ -150,33 +145,23 @@ def decode(codes: dict, bin_data: str) -> str:
 
 
 def huffman_encoding(data: str) -> tuple:
-
-    # 1. Get the character frequency
-    frequencies = get_frequency(data)
-
-    # 2. Make into a sorted list of tuples
-    heap = make_heap(frequencies)
-
-    # 3. Convert value to nodes
-    nodes = make_nodes(heap)
-
-    # 4. Build the tree
-    root = build_tree(nodes)
-
-    # 5. Trim tree
-    root = trim_tree(root)
-
-    # 6. Get binary codes
-    codes = get_codes(root)
-
-    # 7. Encode message
-    return encode(data, codes), root
+    """
+    Converts a string to a Huffman binary sequence
+    :param data: string to encode
+    :return: the binary sequence and the tree root node
+    """
+    frequencies = get_frequency(data)   # 1. Get the character frequency
+    heap = make_heap(frequencies)       # 2. Make into a sorted list of tuples
+    nodes = make_nodes(heap)            # 3. Convert value to nodes
+    root = build_tree(nodes)            # 4. Build the tree
+    root = trim_tree(root)              # 5. Trim tree
+    codes = get_codes(root)             # 6. Get binary codes
+    return encode(data, codes), root    # 7. Return encoded message and root node
 
 
 def huffman_decoding(data, tree) -> str:
     """
     Converts a binary sequence to a string.
-
     :param data: the binary sequence
     :param tree: the tree to reference to retrieve values
     :return: the decoded message
@@ -188,7 +173,6 @@ def huffman_decoding(data, tree) -> str:
 
 
 if __name__ == "__main__":
-    codes = {}
 
     a_great_sentence = "The bird is the word"
 
