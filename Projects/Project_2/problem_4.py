@@ -45,6 +45,27 @@ def is_user_in_group(user, group):
     return False                            # User not found, return false
 
 
+def is_user_in_group(user, group):
+
+    # Initialise variables
+    visit_order = list()
+    root = tree.get_root()
+
+    # Closure function
+    def traverse(node):
+        if node:
+            # Visit node
+            visit_order.append(node.value)
+            # Traverse Left
+            traverse(node.get_left_child())
+            # Traverse Right
+            traverse(node.get_right_child())
+
+    traverse(root)
+
+    return visit_order
+
+
 parent = Group("parent")
 child = Group("child")
 sub_child = Group("subchild")

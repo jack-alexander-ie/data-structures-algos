@@ -79,24 +79,21 @@ def build_tree(heap: list) -> HuffmanNode:
 
 
 def get_codes(root: HuffmanNode) -> dict:
-    """ Uses helper function to get a dictionary of codes """
+    """ Gets node values from a tree and returns a dictionary of codes """
     current_code = ""
     codes = {}
+
+    def get_codes_helper(root, current_code, codes):
+        """ Recursive function to determine codes of each letter """
+        if root is None:
+            return
+        if root.symbol is not None:
+            codes[root.symbol] = current_code
+            return
+        get_codes_helper(root.left, current_code + "0", codes)
+        get_codes_helper(root.right, current_code + "1", codes)
     get_codes_helper(root, current_code, codes)
     return codes
-
-
-def get_codes_helper(root, current_code, codes):
-    """ Recursive function to determine codes of each letter """
-    if root is None:
-        return
-
-    if root.symbol is not None:
-        codes[root.symbol] = current_code
-        return
-
-    get_codes_helper(root.left, current_code + "0", codes)
-    get_codes_helper(root.right, current_code + "1", codes)
 
 
 def encode(text: str, codes: dict) -> str:
