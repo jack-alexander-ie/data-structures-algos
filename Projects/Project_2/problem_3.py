@@ -4,8 +4,8 @@
         1. Empty string
         2. Single character
         3. Odd characters
+    TODO: Add references
 """
-
 import sys
 from heapq import heappush, heappop
 from collections import defaultdict
@@ -18,8 +18,7 @@ class HuffmanNode:
         self.left = left
         self.right = right
 
-    # Operator overloading for object comparison
-    def __lt__(self, other):
+    def __lt__(self, other):                # Operator overloading used for object comparison
         return other.weight > self.weight
 
     def is_leaf(self):
@@ -166,10 +165,9 @@ def huffman_decoding(data, tree) -> str:
     :param tree: the tree to reference to retrieve values
     :return: the decoded message
     """
-    root = tree
-    codes = get_codes(root)
-    decoded_text = decode(codes, data)
-    return decoded_text
+    root = tree                         # 1. Grab the root node
+    codes = get_codes(root)             # 2. Grab the relevant codes
+    return decode(codes, data)          # 3. Return the decoded text
 
 
 if __name__ == "__main__":
