@@ -1,3 +1,8 @@
+"""
+TODO: Add test cases - 1. init cache with chars, 2. init cache without capacity, 3. 
+"""
+
+
 class Node:
     def __init__(self, key=None, value=None):
         self.value = value
@@ -8,7 +13,7 @@ class Node:
 
 class LRUCache:
 
-    def __init__(self, capacity):
+    def __init__(self, capacity=128):
         # Initialize class variables
         self.hash_table = {}
         self.capacity = capacity

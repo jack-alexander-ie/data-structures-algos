@@ -1,39 +1,11 @@
 """
-
-A Huffman code is a type of optimal prefix code that is used for compressing data. The Huffman encoding and decoding
-schema is also lossless, meaning that when compressing the data to make it smaller, there is no loss of information.
-
-The Huffman algorithm works by assigning codes that correspond to the relative frequency of each character for each
-character. The Huffman code can be of any length and does not require a prefix; therefore, this binary code can be
-visualized on a binary tree with each encoded character being stored on leafs.
-
-There are many types of pseudocode for this algorithm. At the basic core, it is comprised of building a Huffman tree,
-encoding the data, and, lastly, decoding the data.
-
-Here is one type of pseudocode for this coding schema:
-
-    - Take a string and determine the relevant frequencies of the characters.
-    - Build and sort a list of tuples from lowest to highest frequencies.
-    - Build the Huffman Tree by assigning a binary code to each letter, using shorter codes for the more frequent
-      letters.(This is the heart of the Huffman algorithm.)
-    - Trim the Huffman Tree (remove the frequencies from the previously built tree).
-    - Encode the text into its compressed form.
-    - Decode the text from its compressed form.
-    - You then will need to create encoding, decoding, and sizing schemas.
-
-    1. Make a dictionary/frequency table
-    2. Turn that into a heap aka sorted priority queue of tuples
-    3. Turn that into doubly linked list with nodes that have the following properties: value, frequency, next, prev, left, right
-    4. Recursively build your tree: a) merge high priority nodes into new node b) put newly merged node back into the queue (hint: it has a lower priority now) c) continue until head == tail
-    5. Walk your tree, each time you go left append a 0 and each time you go right append a 1
-    6. Return your encoded string and tree
+    TODO: Make sizing schema
+    TODO: Wrap into class
 
     TODO: Test Cases
-
-    1. Empty string
-    2. Single character
-    3. Odd characters
-
+        1. Empty string
+        2. Single character
+        3. Odd characters
 """
 
 import sys
