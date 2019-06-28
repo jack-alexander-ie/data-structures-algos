@@ -56,14 +56,60 @@ class LinkedList:
         return size
 
 
+def traverse_ll(head_node: Node):
+
+    node = head_node
+
+    while node:
+        print(node.value)
+        node = node.next
+
+
+def create_ll_from_set(values: set) -> Node:
+    linked_list = LinkedList()
+    for element in values:
+        linked_list.append(element)
+
+    return linked_list.head
+
+
 def union(list_1: LinkedList, list_2: LinkedList):
-    # Your Solution Here
-    pass
+    union_list = set()
+
+    node = list_1.head
+
+    while node:
+        union_list.add(node.value)
+        node = node.next
+
+    node = list_2.head
+
+    while node:
+        union_list.add(node.value)
+        node = node.next
+
+    return create_ll_from_set(union_list)
 
 
 def intersection(list_1: LinkedList, list_2: LinkedList):
-    # Your Solution Here
-    pass
+    ll1_as_set = set()
+    ll2_as_set = set()
+
+    node = list_1.head
+
+    while node:
+        ll1_as_set.add(node.value)
+        node = node.next
+
+    node = list_2.head
+
+    while node:
+        ll2_as_set.add(node.value)
+        node = node.next
+
+    intersection_list = (ll1_as_set ^ ll2_as_set) & ll2_as_set
+
+    return create_ll_from_set(intersection_list)
 
 
 # Test case 1
@@ -79,6 +125,7 @@ for i in element_1:
 
 for i in element_2:
     linked_list_2.append(i)
+
 
 print(union(linked_list_1, linked_list_2))
 print(intersection(linked_list_1, linked_list_2))
