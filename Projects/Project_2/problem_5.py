@@ -1,6 +1,6 @@
 """
 TODO: Add test cases
-TODO: Clarify
+TODO: Clarify issue around storing previous block's address
 """
 
 from hashlib import sha256
@@ -49,9 +49,9 @@ class BlockChain:
         self.head = new_block
 
 
-data_1 = 'Genesis block test'
-data_2 = '2nd block'
-data_3 = '3rd block'
+data_1 = 'Genesis Block'
+data_2 = '2nd Block'
+data_3 = '3rd Block'
 
 blockchain = BlockChain()
 
