@@ -1,3 +1,10 @@
+
+"""
+    Code referenced/re-purposed from:
+
+    1. http://www.openbookproject.net/py4fun/huffman/huffman.html
+    2. http://bhrigu.me/blog/2017/01/17/huffman-coding-python-implementation/
+"""
 import sys
 from heapq import heappush, heappop
 from collections import defaultdict
