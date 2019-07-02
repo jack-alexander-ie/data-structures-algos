@@ -1,11 +1,3 @@
-"""
-    TODO: Wrap into class
-    TODO: Test Cases
-        1. Empty string
-        2. Single character
-        3. Odd characters
-    TODO: Add references
-"""
 import sys
 from heapq import heappush, heappop
 from collections import defaultdict
@@ -37,6 +29,9 @@ def get_frequency(data: str) -> dict:
             chars[char] += 1
         else:
             chars[char] = 1
+    # Handles single character strings
+    if len(chars) < 2:
+        chars['\0'] = 0
     return chars
 
 
@@ -146,6 +141,11 @@ def huffman_encoding(data: str) -> tuple:
     :param data: string to encode
     :return: the binary sequence and the tree root node
     """
+    # Handles empty strings
+    if len(data) < 1:
+        print('Empty string, nothing to compress!')
+        return None, None
+
     frequencies = get_frequency(data)   # 1. Get the character frequency
     heap = make_heap(frequencies)       # 2. Make into a sorted list of tuples
     nodes = make_nodes(heap)            # 3. Convert value to nodes
@@ -169,17 +169,104 @@ def huffman_decoding(data, tree) -> str:
 
 if __name__ == "__main__":
 
-    a_great_sentence = "The bird is the word"
+    # Test Case 1 - Expected
 
-    print("The size of the data is: {}\n".format(sys.getsizeof(a_great_sentence)))
-    print("The content of the data is: {}\n".format(a_great_sentence))
-
-    encoded_data, tree = huffman_encoding(a_great_sentence)
-
+    sentence = "The bird is the word"
+    print("The size of the data is: {}\n".format(sys.getsizeof(sentence)))
+    print("The content of the data is: {}\n".format(sentence))
+    encoded_data, tree = huffman_encoding(sentence)
     print("The size of the encoded data is: {}\n".format(sys.getsizeof(int(encoded_data, base=2))))
     print("The content of the encoded data is: {}\n".format(encoded_data))
-
     decoded_data = huffman_decoding(encoded_data, tree)
-
     print("The size of the decoded data is: {}\n".format(sys.getsizeof(decoded_data)))
     print("The content of the encoded data is: {}\n".format(decoded_data))
+
+    """
+    Expected Output:
+    
+        The size of the data is: 69
+    
+        The content of the data is: The bird is the word
+    
+        The size of the encoded data is: 36
+    
+        The content of the encoded data is: 0100101100110111001111001000110111101111101110110110011001100101001000
+    
+        The size of the decoded data is: 69
+    
+        The content of the encoded data is: The bird is the word
+    
+    """
+
+    # Test Case 2 - Empty String
+
+    # sentence = ""
+    # print("The size of the data is: {}\n".format(sys.getsizeof(sentence)))
+    # print("The content of the data is: {}\n".format(sentence))
+    # encoded_data, tree = huffman_encoding(sentence)
+
+    """
+    Expected Output:
+    
+        The size of the data is: 49
+        
+        The content of the data is: 
+        
+        Empty string, nothing to compress!
+
+    """
+
+    # Test Case 3 - Single Character
+
+    # sentence = "aaaaa"
+    # print("The size of the data is: {}\n".format(sys.getsizeof(sentence)))
+    # print("The content of the data is: {}\n".format(sentence))
+    # encoded_data, tree = huffman_encoding(sentence)
+    # print("The size of the encoded data is: {}\n".format(sys.getsizeof(int(encoded_data, base=2))))
+    # print("The content of the encoded data is: {}\n".format(encoded_data))
+    # decoded_data = huffman_decoding(encoded_data, tree)
+    # print("The size of the decoded data is: {}\n".format(sys.getsizeof(decoded_data)))
+    # print("The content of the encoded data is: {}\n".format(decoded_data))
+
+    """
+    Expected Output:
+    
+        The size of the data is: 54
+        
+        The content of the data is: aaaaa
+        
+        The size of the encoded data is: 28
+        
+        The content of the encoded data is: 11111
+        
+        The size of the decoded data is: 54
+        
+        The content of the encoded data is: aaaaa
+
+    """
+
+    # Test Case 4 - Odd Characters
+    # sentence = "#23%!##"
+    # print("The size of the data is: {}\n".format(sys.getsizeof(sentence)))
+    # print("The content of the data is: {}\n".format(sentence))
+    # encoded_data, tree = huffman_encoding(sentence)
+    # print("The size of the encoded data is: {}\n".format(sys.getsizeof(int(encoded_data, base=2))))
+    # print("The content of the encoded data is: {}\n".format(encoded_data))
+    # decoded_data = huffman_decoding(encoded_data, tree)
+    # print("The size of the decoded data is: {}\n".format(sys.getsizeof(decoded_data)))
+    # print("The content of the encoded data is: {}\n".format(decoded_data))
+    """
+    Expected Output:
+    
+        The size of the data is: 56
+    
+        The content of the data is: #23%!##
+        
+        The size of the encoded data is: 28
+        
+        The content of the encoded data is: 010111111010000
+        
+        The size of the decoded data is: 56
+        
+        The content of the encoded data is: #23%!##
+    """
