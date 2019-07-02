@@ -1,14 +1,14 @@
 """
-Union and Intersection of Two Linked Lists
-
-Fill out the union and intersection functions.
-
 The union of two sets is the set of elements which are in the 1st list, in the 2nd list, or in both.
 The intersection of two sets is the set of all objects that are members of both the sets A and B.
 
 Take in two linked lists and return a linked list that is composed of either the union or intersection.
 
 TODO: Test cases
+      1.
+      2.
+      3.
+
 TODO: Runtime analysis
 """
 
