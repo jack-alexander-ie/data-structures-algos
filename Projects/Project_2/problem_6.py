@@ -1,18 +1,3 @@
-"""
-The union of two sets is the set of elements which are in the 1st list, in the 2nd list, or in both.
-The intersection of two sets is the set of all objects that are members of both the sets A and B.
-
-Take in two linked lists and return a linked list that is composed of either the union or intersection.
-
-TODO: Test cases
-      1.
-      2.
-      3.
-
-TODO: Runtime analysis
-"""
-
-
 class Node:
     def __init__(self, value):
         self.value = value
@@ -20,6 +5,12 @@ class Node:
 
     def __repr__(self):
         return str(self.value)
+
+    def __eq__(self, other):                # Overloaded so nodes raw values can be compared
+        return self.value == other.value
+
+    def __hash__(self):                     # Overloaded so nodes can be hashed for use in set
+        return hash(self.value)
 
 
 class LinkedList:
@@ -35,15 +26,12 @@ class LinkedList:
         return out_string
 
     def append(self, value):
-
         if self.head is None:
             self.head = Node(value)
             return
-
         node = self.head
         while node.next:
             node = node.next
-
         node.next = Node(value)
 
     def size(self):
@@ -52,97 +40,80 @@ class LinkedList:
         while node:
             size += 1
             node = node.next
-
         return size
 
 
-def traverse_ll(head_node: Node):
-
-    node = head_node
-
-    while node:
-        print(node.value)
-        node = node.next
-
-
-def create_ll_from_set(values: set) -> Node:
+def create_ll_from_set(values: set) -> LinkedList:
     linked_list = LinkedList()
     for element in values:
         linked_list.append(element)
+    return linked_list
 
-    return linked_list.head
 
-
-def union(list_1: LinkedList, list_2: LinkedList):
-    union_list = set()
-
-    node = list_1.head
-
+def collect_ll_vals(head_node) -> set:
+    values = set()
+    node = head_node
     while node:
-        union_list.add(node.value)
+        values.add(node)
         node = node.next
+    return values
 
-    node = list_2.head
 
-    while node:
-        union_list.add(node.value)
-        node = node.next
+def collect_from_lists(list_1: LinkedList, list_2: LinkedList):
+    if type(list_1) or type(list_2) != LinkedList:
+        print('One or more input lists is not a linked list, exiting...')
+        exit()
+    if list_1.head is None or list_2.head is None:
+        print('Warning: One or more lists contain no values')
+    list_1_vals, list_2_vals = collect_ll_vals(list_1.head), collect_ll_vals(list_2.head)
+    return list_1_vals, list_2_vals
 
+
+def union(list_1: LinkedList, list_2: LinkedList) -> LinkedList:
+    vals = collect_from_lists(list_1, list_2)
+    union_list = vals[0].union(vals[1])
     return create_ll_from_set(union_list)
 
 
-def intersection(list_1: LinkedList, list_2: LinkedList):
-    ll1_as_set = set()
-    ll2_as_set = set()
-
-    node = list_1.head
-
-    while node:
-        ll1_as_set.add(node.value)
-        node = node.next
-
-    node = list_2.head
-
-    while node:
-        ll2_as_set.add(node.value)
-        node = node.next
-
-    intersection_list = (ll1_as_set ^ ll2_as_set) & ll2_as_set
-
+def intersection(list_1: LinkedList, list_2: LinkedList) -> LinkedList:
+    vals = collect_from_lists(list_1, list_2)
+    intersection_list = (vals[0] ^ vals[1]) & vals[1]
     return create_ll_from_set(intersection_list)
 
 
-# Test case 1
-
-linked_list_1 = LinkedList()
-linked_list_2 = LinkedList()
-
-element_1 = [3, 2, 4, 35, 6, 65, 6, 4, 3, 21]
-element_2 = [6, 32, 4, 9, 6, 1, 11, 21, 1]
-
-for i in element_1:
-    linked_list_1.append(i)
-
-for i in element_2:
-    linked_list_2.append(i)
-
-
+# Test Case 1 - Expected
+element_1, element_2 = {3, 2, 4, 35, 6, 65, 6, 4, 3, 21}, {6, 32, 4, 9, 6, 1, 11, 21, 1}
+linked_list_1, linked_list_2 = create_ll_from_set(element_1), create_ll_from_set(element_2)
 print(union(linked_list_1, linked_list_2))
 print(intersection(linked_list_1, linked_list_2))
 
-# Test case 2
+"""
+Expected Output:
 
-linked_list_3 = LinkedList()
-linked_list_4 = LinkedList()
+32 -> 65 -> 2 -> 3 -> 35 -> 4 -> 6 -> 1 -> 9 -> 11 -> 21 -> 
+32 -> 1 -> 11 -> 9 -> 
+"""
 
-element_1 = [3, 2, 4, 35, 6, 65, 6, 4, 3, 23]
-element_2 = [1, 7, 8, 9, 11, 21, 1]
+# Test Case 2 - Empty set(s)
+# element_1, element_2 = set(), set()
+# linked_list_1, linked_list_2 = create_ll_from_set(element_1), create_ll_from_set(element_2)
+# print(union(linked_list_1, linked_list_2))
+# print(intersection(linked_list_1, linked_list_2))
 
-for i in element_1:
-    linked_list_3.append(i)
+"""
+Expected Output:
 
-for i in element_2:
-    linked_list_4.append(i)
+Warning: One or more lists contain no values
 
-print(union(linked_list_3, linked_list_4))
-print(intersection(linked_list_3, linked_list_4))
+Warning: One or more lists contain no values
+
+"""
+
+# Test Case 3 - Incorrect data types
+# element_1, element_2 = {3, 2, 4, 35, 6, 65, 6, 4, 3, 21}, dict()
+# linked_list_1, linked_list_2 = create_ll_from_set(element_1), create_ll_from_set(element_2)
+# print(union(linked_list_1, linked_list_2))
+# print(intersection(linked_list_1, linked_list_2))
+"""
+Expected Output: One or more input lists is not a linked list, exiting...
+"""
