@@ -5,11 +5,11 @@ def find_files(suffix, path):
 
     # Check path path validity
     if not os.path.exists(path) or not os.access(os.path.dirname(path), os.W_OK):
-        return 'Invalid path'
+        return 'The path given is invalid'
 
     # Check suffix validity
     if suffix is '' or not suffix.startswith('.') or len(suffix) < 2:
-        return 'Invalid suffix'
+        return 'The suffix given is invalid'
 
     # Create array to store results
     files = []
@@ -39,13 +39,24 @@ def find_files(suffix, path):
         return 'No files found with matching suffix'
 
 
-# Test Case 1 - expected
+# Test Case 1 - Expected
 suffix, path = '.c', 'testdir/'
+"""
+Expected Output: 
 
-# Test Case 2 - invalid directory
+['.../testdir/subdir1/a.c', '.../testdir/subdir5/a.c', '.../testdir/t1.c', '.../testdir/subdir3/subsubdir1/b.c']
+"""
+
+# Test Case 2 - Invalid directory
 # suffix, path = '.c', 'test/'
+"""
+Expected Output: 'The path given is invalid'
+"""
 
 # Test Case 3 - invalid suffix
 # suffix, path = '.', 'testdir/'
+"""
+Expected Output: 'The suffix given is invalid'
+"""
 
 print(find_files(suffix, path))
