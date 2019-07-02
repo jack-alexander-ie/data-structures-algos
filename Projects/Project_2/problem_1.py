@@ -76,18 +76,18 @@ class LRUCache:
 
 
 # Test Case 1 - Expected output
-# cache = LRUCache(5)
-#
-# cache.set(1, 1)
-# cache.set(2, 2)
-# cache.set(3, 3)
-# cache.set(4, 4)
-# cache.set(5, 5)
-#
-# cache.get(1)
-# cache.get(4)
-#
-# cache.print_cache()
+cache = LRUCache(5)
+
+cache.set(1, 1)
+cache.set(2, 2)
+cache.set(3, 3)
+cache.set(4, 4)
+cache.set(5, 5)
+
+cache.get(1)
+cache.get(4)
+
+cache.print_cache()
 
 """
 Expected Result:
@@ -121,9 +121,9 @@ Expected Result:
 """
 
 # Test Case 3 - Non-integer input
-cache = LRUCache('a')
-
-cache.print_cache()
+# cache = LRUCache('a')
+#
+# cache.print_cache()
 
 """
 Expected Result: AssertionError - type(capacity) is int
