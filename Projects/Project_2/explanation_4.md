@@ -17,6 +17,9 @@ search through all the group and their subgroups, and is a similar implementatio
 
 ### Time Complexity
 
+As the group tree has N groups and M users, every group will be recursively searched and each user will be processed 
+once when being iterated over. In this case, time complexity will be O( M + N ), or O(N), similar to problem 2.
+
 The worst case time complexity of the is_user_in_group() method is O(n) as it has to recursively search through an 
 unknown number of groups and subgroups, making the time complexity grow linearly to the input.
 
