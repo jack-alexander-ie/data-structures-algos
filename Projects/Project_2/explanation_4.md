@@ -17,17 +17,16 @@ search through all the group and their subgroups, and is a similar implementatio
 
 ### Time Complexity
 
-The time complexity of the is_user_in_group() method is O(n) and it has to search through an unknown number of groups 
-and subgroups.
-
-The overall time complexity could be considered to be O(n)
+The worst case time complexity of the is_user_in_group() method is O(n) as it has to recursively search through an 
+unknown number of groups and subgroups, making the time complexity grow linearly to the input.
 
 ### Space Complexity
 
 With regards to space complexity, the implementation of the is_user_in_group() method could be considered to be O(1) 
 as all that is returned is a single boolean value.
 
-If it is being assessed, the number of groups and their users has a space complexity of O(n) as any number of groups and users can be added.
+If it is being assessed, the number of groups and their users has a space complexity of O(n) as any number of groups and 
+users can be added.
 
 ## Conclusion
 
