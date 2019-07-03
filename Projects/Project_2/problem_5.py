@@ -101,3 +101,21 @@ Expected Output: Blockchain is empty, nothing to report.
 """
 Expected Output: No data to add, cannot create block.
 """
+
+# Test Case 4 - Tampered block
+# blockchain = BlockChain()
+#
+# data_1 = 'Genesis Block'
+# data_2 = '2nd Block'
+# data_3 = '3rd Block'
+#
+# blockchain.add_block(data_1)
+# blockchain.add_block(data_2)
+# blockchain.add_block(data_3)
+#
+# tampered_block = blockchain.head.prev_block.prev_block
+# tampered_block.data = 'altered data, invalidating block'
+# comparison_block = blockchain.head.prev_block
+#
+# print("Expected hash:\t", comparison_block.prev_hash)
+# print('Corrupted hash:\t', tampered_block.calc_hash())
