@@ -1,10 +1,3 @@
-
-"""
-    Code referenced/re-purposed from:
-
-    1. http://www.openbookproject.net/py4fun/huffman/huffman.html
-    2. http://bhrigu.me/blog/2017/01/17/huffman-coding-python-implementation/
-"""
 import sys
 from heapq import heappush, heappop
 from collections import defaultdict
@@ -36,8 +29,7 @@ def get_frequency(data: str) -> dict:
             chars[char] += 1
         else:
             chars[char] = 1
-    # Handles single character strings
-    if len(chars) < 2:
+    if len(chars) < 2:                      # Handles single character strings
         chars['\0'] = 0
     return chars
 
@@ -262,6 +254,7 @@ if __name__ == "__main__":
     # decoded_data = huffman_decoding(encoded_data, tree)
     # print("The size of the decoded data is: {}\n".format(sys.getsizeof(decoded_data)))
     # print("The content of the encoded data is: {}\n".format(decoded_data))
+
     """
     Expected Output:
     
