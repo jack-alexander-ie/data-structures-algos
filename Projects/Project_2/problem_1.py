@@ -7,16 +7,17 @@ class Node:
 
 
 class LRUCache:
-    def __init__(self, capacity=32):
-        assert type(capacity) is int
+    def __init__(self, capacity):
         self.hash_table = {}
         self.capacity = capacity
         self.size = 0
         self.head: Node = None
         self.tail: Node = None
+        assert self.__init_check() is True
 
     def get(self, key: int):
         assert type(key) is int
+        assert self.__check_capacity() is True
         if self.hash_table.get(key) is None:    # Retrieve item from provided key. Return -1 if nonexistent.
             return -1
         else:
@@ -25,6 +26,7 @@ class LRUCache:
 
     def set(self, key: int, value) -> None:
         assert type(key) is int
+        assert self.__check_capacity() is True
         node = Node(key, value)                 # Set value if key not present. If at capacity, remove oldest item.
         if self.size == 0:
             self.__init_cache(key, node)        # If cache is empty, initialise it
@@ -42,11 +44,28 @@ class LRUCache:
             print(node.key, node.value)
             node = node.next
 
+    def __init_check(self) -> bool:
+        if type(self.capacity) is not int:
+            print('Warning: Capacity value not an integer')
+            return False
+        if self.capacity is 0:
+            print('Warning: Initialised capacity value is 0')
+        elif self.capacity < 0:
+            print('Warning: Capacity value cannot be less than zero')
+            return False
+        return True
+
     def __init_cache(self, key: int, node: Node) -> None:
         self.head = node                        # Point head and tail to the same node
         self.tail = node
         self.hash_table[key] = node             # Store the memory address in the hash table
         self.size += 1                          # Increase element count
+
+    def __check_capacity(self):
+        if self.capacity is 0:
+            print("Can't perform operations on 0 capacity cache")
+            return False
+        return True
 
     def __to_head(self, key: int) -> None:
         node = self.hash_table[key]
@@ -78,49 +97,53 @@ class LRUCache:
 # Test Case 1 - Expected output
 cache = LRUCache(5)
 
+# Set init values
 cache.set(1, 1)
 cache.set(2, 2)
 cache.set(3, 3)
 cache.set(4, 4)
 cache.set(5, 5)
 
+# Get values
 cache.get(1)
 cache.get(4)
+
+# Update values
+cache.set(3, 7)
 
 cache.print_cache()
 
 """
 Expected Result:
-
+3 7
 4 4
 1 1
 5 5
-3 3
 2 2
 """
 
 # Test Case 2 - Empty input
-# cache = LRUCache()
-#
+# cache = LRUCache(0)
 # cache.set(1, 1)
-# cache.set(2, 2)
-# cache.set(3, 3)
-# cache.set(4, 4)
-# cache.set(5, 5)
-#
-# cache.print_cache()
+# cache.get(2)
 
 """
 Expected Result:
-
-5 5
-4 4
-3 3
-2 2
-1 1
+Warning: Initialised capacity value is 0
+Can't perform operations on 0 capacity cache
+AssertionError - assert self.__check_capacity() is True
 """
 
-# Test Case 3 - Non-integer input
+# Test Case 3 - Negative input
+# cache = LRUCache(-2)
+
+"""
+Expected Result:
+Warning: Capacity value cannot be less than or equal to zero
+AssertionError - assert self.__init_check() is True
+"""
+
+# Test Case 4 - Non-integer input
 # cache = LRUCache('a')
 #
 # cache.print_cache()

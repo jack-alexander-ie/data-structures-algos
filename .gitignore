@@ -157,6 +157,9 @@ crashlytics-build.properties
 # sqlite
 *.sqlite3
 
+# Jack's Custom Files
+
 staticfiles
 .env
 testdir/
+*.zip
