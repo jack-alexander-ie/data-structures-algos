@@ -68,7 +68,6 @@ def build_tree(heap: list) -> HuffmanNode:
         merged.left = node1
         merged.right = node2
         heappush(heap, merged)
-        heap.sort()
     return heap[0]
 
 
