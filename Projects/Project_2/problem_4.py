@@ -69,6 +69,7 @@ child.print_group_names()
 sub_child.print_group_names()
 """
 Expected Output:
+
 child
 subchild
 No subgroups found.

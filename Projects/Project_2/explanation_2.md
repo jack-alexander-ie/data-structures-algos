@@ -17,3 +17,9 @@ The time complexity for this solution could be considered O(n) as it depends on 
 ### Space Complexity
 
 Similarly, the space complexity for this solution could be considered O(n) as it depends on the number of matching fies contained in a folder.
+
+## Conclusion
+
+Time Complexity: O(n)
+
+Space Complexity: O(n)

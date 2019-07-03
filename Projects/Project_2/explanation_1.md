@@ -18,3 +18,9 @@ By combining these two - the hash map for O(1) get/delete/put operations and dou
 ### Space Complexity
 
 The space complexity for this algorithm could be said to be O(n) as it entirely depends on the size of the cache that the user wants.
+
+## Conclusion
+
+Time Complexity: O(1)
+
+Space Complexity: O(n)

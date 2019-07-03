@@ -66,3 +66,9 @@ worst case, all ASCII characters are used.
 
 That said, the space complexity of a huffman tree could be said to be O(n), as it depends on which characters appear in 
 the inputted data.
+
+## Conclusion:
+
+Time Complexity: O(n log n)
+
+Space Complexity: O(n)

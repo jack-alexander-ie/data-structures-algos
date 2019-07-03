@@ -6,7 +6,7 @@ class Node:
     def __repr__(self):
         return str(self.value)
 
-    def __eq__(self, other):                # Overloaded so nodes raw values can be compared
+    def __eq__(self, other):                # Overloaded so raw node values can be compared
         return self.value == other.value
 
     def __hash__(self):                     # Overloaded so nodes can be hashed for use in set
