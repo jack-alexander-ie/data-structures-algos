@@ -88,3 +88,10 @@ Expected Output: AssertionError - assert type(user) == str
 """
 Expected Output: AssertionError - assert type(group) == type(self)
 """
+
+# Test Case 4
+# print(is_user_in_group(sub_child_user, parent))
+
+""" 
+Expected Output: True
+"""

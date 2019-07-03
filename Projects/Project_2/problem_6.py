@@ -60,7 +60,7 @@ def collect_ll_vals(head_node) -> set:
 
 
 def collect_from_lists(list_1: LinkedList, list_2: LinkedList):
-    if type(list_1) or type(list_2) != LinkedList:
+    if type(list_1) != LinkedList or type(list_2) != LinkedList:
         print('One or more input lists is not a linked list, exiting...')
         exit()
     if list_1.head is None or list_2.head is None:
@@ -77,13 +77,14 @@ def union(list_1: LinkedList, list_2: LinkedList) -> LinkedList:
 
 def intersection(list_1: LinkedList, list_2: LinkedList) -> LinkedList:
     vals = collect_from_lists(list_1, list_2)
-    intersection_list = (vals[0] ^ vals[1]) & vals[1]
+    intersection_list = vals[0].intersection(vals[1])
     return create_ll_from_set(intersection_list)
 
 
 # Test Case 1 - Expected
 element_1, element_2 = {3, 2, 4, 35, 6, 65, 6, 4, 3, 21}, {6, 32, 4, 9, 6, 1, 11, 21, 1}
 linked_list_1, linked_list_2 = create_ll_from_set(element_1), create_ll_from_set(element_2)
+
 print(union(linked_list_1, linked_list_2))
 print(intersection(linked_list_1, linked_list_2))
 
@@ -91,7 +92,7 @@ print(intersection(linked_list_1, linked_list_2))
 Expected Output:
 
 32 -> 65 -> 2 -> 3 -> 35 -> 4 -> 6 -> 1 -> 9 -> 11 -> 21 -> 
-32 -> 1 -> 11 -> 9 -> 
+4 -> 21 -> 6 ->
 """
 
 # Test Case 2 - Empty set(s)
