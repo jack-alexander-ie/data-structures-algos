@@ -1,35 +1,29 @@
-"""
-Find the square root of the integer without using any Python library. You have to find the floor value of the square root.
+def sqrt(number, comparator=-1, prev_mult=0):
 
-For example if the given number is 16, then the answer would be 4.
+    # Test block for initial call
+    if comparator == -1:
+        comparator = number
 
-If the given number is 27, the answer would be 5 because sqrt(5) = 5.196 whose floor value is 5.
+    if comparator == 0 or comparator == 1:              # No root, return number itself
+        return number                                   # Return itself as only square
 
-The expected time complexity is O(log(n))
-"""
+    center_value = (comparator - 1) // 2                # Center value
+    center_multiplied = center_value * center_value
 
+    if center_multiplied == number:                     # Perfect square exists, return value
+        return center_value
+    elif center_multiplied < number:                    # Move right
 
-def sqrt(number):
-    """
-    Calculate the floored square root of a number
+        prev_square = prev_mult * prev_mult             # Get square of previous multiplier
+        if prev_square > number:                        # If previous square > target..
+            return center_value                         # ..return floored value
 
-    Args:
-       number(int): Number to find the floored squared root
-    Returns:
-       int: Floored Square Root
-    """
-    i = number.bit_length() >> 1
-    m = 1 << i
-    while m * m > number:
-        m >>= 1
-        i -= 1
-    for k in range(i - 1, -1, -1):
-        x = m | (1 << k)
-        if x * x <= number:
-            m = x
-    return m
+        return sqrt(number, comparator + 1, center_value)
+    else:                                               # Move left
+        return sqrt(number, comparator - 1, center_value)
 
 
+# Test Cases
 print("Pass" if (3 == sqrt(9)) else "Fail")
 print("Pass" if (0 == sqrt(0)) else "Fail")
 print("Pass" if (4 == sqrt(16)) else "Fail")
