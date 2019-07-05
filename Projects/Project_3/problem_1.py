@@ -1,3 +1,6 @@
+import time
+
+
 def sqrt(number, comparator=-1, prev_mult=0):
 
     # Test block for initial call
@@ -18,9 +21,9 @@ def sqrt(number, comparator=-1, prev_mult=0):
         if prev_square > number:                        # If previous square > target..
             return center_value                         # ..return floored value
 
-        return sqrt(number, comparator + 1, center_value)
+        return sqrt(number, comparator + 2, center_value)
     else:                                               # Move left
-        return sqrt(number, comparator - 1, center_value)
+        return sqrt(number, comparator - 2, center_value)
 
 
 # Test Cases
