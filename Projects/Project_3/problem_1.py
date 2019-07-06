@@ -1,24 +1,26 @@
 def sqrt(number):
 
-    if number == 0 or number == 1:                      # No root, return number itself
-        return number                                   # Return itself as only square
+    if number < 2:                              # No root, return number itself
+        return number                           # Return itself as only square
 
-    start, end, root = 1, number, 0
+    low, high = 1, number//2                    # Square root cannot be more than number/2
 
-    while start <= end:
+    result = 0
 
-        center_value = (start + end) // 2  # Center value
-        center_multiplied = center_value * center_value
+    while low <= high:
 
-        if center_multiplied == number:                     # Perfect square exists, return value
-            return center_value
-        elif center_multiplied < number:                    # Move right
-            start = center_value + 1
-            root = center_value
-        else:                                               # Move left
-            end = center_value - 1
+        mid_value = (low + high) // 2           # Center value
+        mid_squared = mid_value * mid_value
 
-    return root
+        if mid_squared == number:               # Perfect square exists, return value
+            return mid_value
+        elif mid_squared < number:              # Move right
+            low = mid_value + 1
+            result = mid_value
+        else:                                   # Move left
+            high = mid_value - 1
+
+    return result
 
 # Test Cases - All pass
 # print("Pass" if (3 == sqrt_rec(9)) else "Fail")
@@ -27,6 +29,5 @@ def sqrt(number):
 # print("Pass" if (1 == sqrt_rec(1)) else "Fail")
 # print("Pass" if (5 == sqrt_rec(27)) else "Fail")
 
-
 # Test Case - Large numbers
-# print("Pass" if (100 == sqrt_iter(10000)) else "Fail")
+# print("Pass" if (100 == sqrt(10000)) else "Fail")
