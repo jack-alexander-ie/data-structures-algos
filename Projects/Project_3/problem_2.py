@@ -58,24 +58,9 @@ def binary_search_recursive(array, target, start_index, end_index):
     return -1
 
 
-def linear_search(input_list, number):
-    for index, element in enumerate(input_list):
-        if element == number:
-            return index
-    return -1
-
-
-def test_function(test_case):
-    input_list = test_case[0]
-    number = test_case[1]
-    if linear_search(input_list, number) == rotated_array_search(input_list, number):
-        print("Pass")
-    else:
-        print("Fail")
-
-
-test_function([[6, 7, 8, 9, 10, 1, 2, 3, 4], 6])
-test_function([[6, 7, 8, 9, 10, 1, 2, 3, 4], 1])
-test_function([[6, 7, 8, 1, 2, 3, 4], 8])
-test_function([[6, 7, 8, 1, 2, 3, 4], 1])
-test_function([[6, 7, 8, 1, 2, 3, 4], 10])
+# Test Cases - All pass
+print("Pass" if (0 == rotated_array_search([6, 7, 8, 9, 10, 1, 2, 3, 4], 6)) else "Fail")
+print("Pass" if (5 == rotated_array_search([6, 7, 8, 9, 10, 1, 2, 3, 4], 1)) else "Fail")
+print("Pass" if (2 == rotated_array_search([6, 7, 8, 1, 2, 3, 4], 8)) else "Fail")
+print("Pass" if (3 == rotated_array_search([6, 7, 8, 1, 2, 3, 4], 1)) else "Fail")
+print("Pass" if (-1 == rotated_array_search([6, 7, 8, 1, 2, 3, 4], 10)) else "Fail")
