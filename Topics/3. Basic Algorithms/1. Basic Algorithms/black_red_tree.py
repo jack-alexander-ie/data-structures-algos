@@ -127,3 +127,46 @@ class RedBlackTree(object):
             else:
                 p.right = node_moving_up
         node_moving_up.parent = p
+
+
+def print_tree(node, level=0):
+    print('   ' * (level - 1) + '+--' * (level > 0) + '%s' % node)
+    if node.left:
+        print_tree(node.left, level + 1)
+    if node.right:
+        print_tree(node.right, level + 1)
+
+
+tree = RedBlackTree(9)
+tree.insert(6)
+tree.insert(19)
+
+print_tree(tree.root)
+
+"""
+9R
++--6R
++--19R
+"""
+
+tree.insert(13)
+print_tree(tree.root)
+
+"""
+9R
++--6B
++--19B
+   +--13R
+"""
+
+tree.insert(16)
+print_tree(tree.root)
+
+"""
+9R
++--6B
++--16R
+   +--13B
+      +--16R
+   +--19B
+"""
