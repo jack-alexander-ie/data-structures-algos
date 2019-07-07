@@ -1,13 +1,18 @@
 def recursive_binary_search(target, source, left=0):
     if len(source) == 0:
         return None
-    center = (len(source)-1) // 2
-    if source[center] == target:
-        return center + left
-    elif source[center] < target:
-        return recursive_binary_search(target, source[center+1:], left+center+1)
+
+    center_index = (len(source) - 1) // 2   # Center index point
+    center_value = source[center_index]     # Value at center index point
+
+    if center_value == target:
+        return center_index + left
+
+    elif center_value < target:
+        return recursive_binary_search(target, source[center_index+1:], left+center_index+1)
+
     else:
-        return recursive_binary_search(target, source[:center], left)
+        return recursive_binary_search(target, source[:center_index], left)
 
 
 def find_first(target, source):
