@@ -163,3 +163,4 @@ staticfiles
 .env
 testdir/
 *.zip
+References/
