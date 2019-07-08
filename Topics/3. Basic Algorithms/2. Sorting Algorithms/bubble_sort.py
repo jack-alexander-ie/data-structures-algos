@@ -1,4 +1,9 @@
-""" Two different bubble sort implementations """
+""" Two different bubble sort implementations
+
+
+.....
+
+"""
 
 
 def bubble_sort_1(list_of_nums):
@@ -10,7 +15,7 @@ def bubble_sort_1(list_of_nums):
 
         range_max = list_length - i - 1
 
-        for j in range(0, range_max):           # Traverse from 0 to n-i-1. Swap if element found > next element
+        for j in range(0, range_max):                 # Traverse from 0 to n-i-1. Swap if element found > next element
 
             if list_of_nums[j] > list_of_nums[j + 1]:
                 list_of_nums[j], list_of_nums[j + 1] = list_of_nums[j + 1], list_of_nums[j]
