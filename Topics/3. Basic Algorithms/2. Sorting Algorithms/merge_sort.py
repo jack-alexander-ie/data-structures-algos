@@ -51,3 +51,6 @@ test_list_3 = [97, 98, 99]
 print('{} to {}'.format(test_list_1, mergesort(test_list_1)))
 print('{} to {}'.format(test_list_2, mergesort(test_list_2)))
 print('{} to {}'.format(test_list_3, mergesort(test_list_3)))
+
+test_list_4 = [3, 2, 5, 3, 1, 5, 1, 3, 6, 1]
+print('{} to {}'.format(test_list_4, mergesort(test_list_4)))
