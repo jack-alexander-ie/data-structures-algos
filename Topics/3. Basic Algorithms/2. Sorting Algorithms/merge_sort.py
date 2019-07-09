@@ -22,27 +22,22 @@ def merge(left, right):
     left_index = 0
     right_index = 0
 
-    # Move through the lists until we have exhausted one
-    while left_index < len(left) and right_index < len(right):
-        # If left's item is larger, append right's item
-        # and increment the index
-        if left[left_index] > right[right_index]:
+    while left_index < len(left) and right_index < len(right):  # Move through the lists until we have exhausted one
+
+        if left[left_index] > right[right_index]:   # If left's item larger, append right's item & increment index
             merged.append(right[right_index])
             right_index += 1
-        # Otherwise, append left's item and increment
-        else:
+        else:                                       # Otherwise, append left's item and increment
             merged.append(left[left_index])
             left_index += 1
 
-    # Append any leftovers. Because we've broken from our while loop,
-    # we know at least one is empty, and the remaining:
-    # a) are already sorted
-    # b) all sort past our last element in merged
+    # Append any leftovers. Because we've broken from our while loop, we know at least one is empty, and the remaining:
+    #   a) are already sorted
+    #   b) all sort past our last element in merged
     merged += left[left_index:]
     merged += right[right_index:]
 
-    # return the ordered, merged list
-    return merged
+    return merged   # return the ordered, merged list
 
 
 test_list_1 = [8, 3, 1, 7, 0, 10, 2]
