@@ -89,13 +89,13 @@ from collections import defaultdict
 
 class TrieNodeCleaner:
     def __init__(self):
-        self.children = defaultdict(TrieNode)
+        self.children = defaultdict(TrieNodeCleaner)
         self.is_word = False
 
 
 class TrieCleaner:
     def __init__(self):
-        self.root = TrieNode()
+        self.root = TrieNodeCleaner()
 
     def add(self, word):
         """
