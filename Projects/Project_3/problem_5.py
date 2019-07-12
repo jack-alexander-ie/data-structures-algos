@@ -1,18 +1,14 @@
-from ipywidgets import widgets
-from IPython.display import display
-from ipywidgets import interact
 from collections import defaultdict
 
 
 class TrieNode:
     def __init__(self):
-        # Initialize this node in the Trie
         self.children = defaultdict(TrieNode)
         self.is_word = False
 
     def insert(self, char):
         # Add a child node in this Trie
-        pass
+        self.children[char] = TrieNode()
 
     def suffixes(self, suffix=''):
         # Recursive function that collects the suffix for all complete words below this point
@@ -21,12 +17,11 @@ class TrieNode:
 
 class Trie:
     def __init__(self):
-        # Initialize this Trie (add a root node)
         self.root = TrieNode()
 
     def insert(self, word):
         """
-        Add `word` to trie
+        Add a word to the trie
         """
         current_node = self.root
 
@@ -36,35 +31,26 @@ class Trie:
 
     def find(self, prefix):
         # Find the Trie node that represents this prefix
-        current_node = self.root
-
-        for char in word:
-            if char not in current_node.children:
-                return False
-            current_node = current_node.children[char]
-
-        return current_node.is_word
+        # current_node = self.root
+        #
+        # for char in word:
+        #     if char not in current_node.children:
+        #         return False
+        #     current_node = current_node.children[char]
+        #
+        # return current_node.is_word
+        pass
 
 
 MyTrie = Trie()
-wordList = [
+
+word_list = [
     "ant", "anthology", "antagonist", "antonym",
     "fun", "function", "factory",
     "trie", "trigger", "trigonometry", "tripod"
 ]
-for word in wordList:
+
+print(MyTrie.root.children['a'].children['n'].children['t'].is_word)
+
+for word in word_list:
     MyTrie.insert(word)
-
-
-def f(prefix):
-    if prefix != '':
-        prefix_node = MyTrie.find(prefix)
-        if prefix_node:
-            print('\n'.join(prefix_node.suffixes()))
-        else:
-            print(prefix + " not found")
-    else:
-        print('')
-
-
-interact(f, prefix='')
