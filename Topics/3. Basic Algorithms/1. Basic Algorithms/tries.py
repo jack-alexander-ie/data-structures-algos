@@ -72,55 +72,6 @@ class Trie:
         return current_node.is_word
 
 
-# trie = Trie()
-#
-# trie.add('garbage')
-# trie.add('garb')
-#
-# print(trie.exists('pen'))       # False
-# print(trie.exists('garb'))      # True
-# print(trie.exists('garbg'))     # False
-# print(trie.exists('garbage'))   # True
-
-
-# Cleaner Trie Implementation using defautdict
-from collections import defaultdict
-
-
-class TrieNodeCleaner:
-    def __init__(self):
-        self.children = defaultdict(TrieNodeCleaner)
-        self.is_word = False
-
-
-class TrieCleaner:
-    def __init__(self):
-        self.root = TrieNodeCleaner()
-
-    def add(self, word):
-        """
-        Add `word` to trie
-        """
-        current_node = self.root
-
-        for char in word:                                    # 1. Assess each character in the inout word
-            current_node = current_node.children[char]       # 2. Update the node to point it to the next node
-            current_node.is_word = True                      # 3. Set the characters end_word bool to true
-
-    def exists(self, word):
-        """
-        Check if word exists in trie
-        """
-        current_node = self.root
-
-        for char in word:
-            if char not in current_node.children:
-                return False
-            current_node = current_node.children[char]
-
-        return current_node.is_word
-
-
 trie = Trie()
 
 trie.add('garbage')
