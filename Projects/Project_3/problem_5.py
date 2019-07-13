@@ -1,5 +1,4 @@
 from collections import defaultdict
-from typing import List
 
 
 class TrieNode:
@@ -28,14 +27,12 @@ class TrieNode:
 
         for child, node in self.children.items():
 
-            suffix = suffix + node.char
-
             if node.is_word:
                 # Append to suffixes
-                suffix_list.append(suffix)
+                suffix_list.append(suffix + node.char)
 
             if node.children is not None:
-                node.suffixes(suffix, suffix_list)
+                node.suffixes(suffix + node.char, suffix_list)
 
         return suffix_list
 
@@ -78,7 +75,7 @@ MyTrie = Trie()
 
 word_list = [
     "ant", "anthology", "antagonist", "antonym",
-    "fun", "function", "factor", "factory", "factorial",
+    "fun", "function", "factor", "factory", "factorial", "fart",
     "trie", "trigger", "trigonometry", "tripod"
 ]
 
