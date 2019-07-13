@@ -1,10 +1,12 @@
 from collections import defaultdict
+from typing import List
 
 
 class TrieNode:
     def __init__(self):
         self.children = defaultdict(TrieNode)
         self.is_word = False
+        self.char = ''
 
     def insert(self, char: str) -> None:
         """ Adds a child node to a TrieNode """
@@ -21,12 +23,21 @@ class TrieNode:
         else:
             self.children[char] = TrieNode()    # Add character if it doesn't exist
 
-    def suffixes(self, suffix: str = '') -> list:
+    def suffixes(self, suffix: str = '', suffix_list=[]):
         """ Recursively collects all the suffixes for a given node """
 
-        suffixes = ['test']
+        for child, node in self.children.items():
 
-        return suffixes
+            suffix = suffix + node.char
+
+            if node.is_word:
+                # Append to suffixes
+                suffix_list.append(suffix)
+
+            if node.children is not None:
+                node.suffixes(suffix, suffix_list)
+
+        return suffix_list
 
 
 class Trie:
@@ -39,6 +50,7 @@ class Trie:
         last_index = len(word) - 1
         for index, char in enumerate(word):              # 1. Assess each character in the input word
             current_node = current_node.children[char]   # 2. Update the node to point it to the next node
+            current_node.char = char
             if index is last_index:                      # 3. Set to true if last character is in the word
                 current_node.is_word = True              # 4. Flip char's is_word bool to denote complete word
 
@@ -66,7 +78,7 @@ MyTrie = Trie()
 
 word_list = [
     "ant", "anthology", "antagonist", "antonym",
-    "fun", "function", "factory", "factorial",
+    "fun", "function", "factor", "factory", "factorial",
     "trie", "trigger", "trigonometry", "tripod"
 ]
 
@@ -74,7 +86,7 @@ for word in word_list:
     MyTrie.insert(word)
 
 parent_node = MyTrie.find('f')
-print(parent_node.children)
+
 suffixes = parent_node.suffixes()
 
 print(suffixes)
