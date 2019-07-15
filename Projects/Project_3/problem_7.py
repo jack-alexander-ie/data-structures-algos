@@ -1,4 +1,5 @@
 from collections import defaultdict
+from typing import List
 
 
 class RouteTrieNode:
@@ -9,9 +10,13 @@ class RouteTrieNode:
         self.children = defaultdict(RouteTrieNode)
         self.handler = handler
 
-    def insert(self, *args):
-        """ Inserts a new child node """
-        pass
+    def insert(self, path, handler=None):
+        """ Inserts a new child path """
+        if path in self.children:                         # Return None if path already exists
+            print('Warning: Path already exists!')
+            return
+        else:
+            self.children[path] = RouteTrieNode(handler)  # Add character if it doesn't exist
 
 
 class RouteTrie:
@@ -21,49 +26,53 @@ class RouteTrie:
         """ Initialises trie with a root node and root handler """
         self.root = RouteTrieNode(root_handler)
 
-    def insert(self, *args):
+    def insert(self, path_parts, handler):
         """ Recursively adds nodes to the trie """
-        # TODO: assign the handler to only the leaf (deepest) node of this path
-        pass
+        current_node = self.root
+        for part in path_parts:                           # Traverse to the deepest node in the path
+            current_node = current_node.children[part]    # defaultdict auto adds it if it doesn't already exist
+        current_node.handler = handler                    # Assign the leaf a handler
 
-    def find(self, *args):
+    def find(self, path_parts):
         """ Finds if there is a path match """
-        # TODO: Return the handler if there's a match, otherwise None
-        pass
+        current_node = self.root                          # Start at the root
+        for part in path_parts:                           # Cycle through the path parts
+            if part not in current_node.children:         # If path doesn't exist...
+                return                                    # ..return None
+            current_node = current_node.children[part]    # Else, traverse onwards
+        return current_node.handler                       # Return its handler
 
 
 class Router:
-    """ Wrapper for Trie and handles """
+    """ Wrapper for Trie and handlers """
 
-    def __init__(self, *args):
+    def __init__(self, root_handler, path_not_found):
         """ Creates a new RouteTrie for holding routes """
-        # TODO: add a handler for 404 responses
-        pass
+        self.route_trie = RouteTrie(root_handler)           # Passes root handler to the initialised trie
+        self.path_not_found = path_not_found                # Stores 404 not found response
 
-    def add_handler(self, *args):
+    def add_handler(self, path, handler) -> None:
         """ Adds a handler for a path """
-        # TODO: split the path and pass parts as a list to the RouteTrie
-        pass
+        path_parts = self.split_path(path)                  # Splits parts into constituent components
+        self.route_trie.insert(path_parts, handler)         # Passes parts on for addition to the trie
 
-    def lookup(self, *args):
+    def lookup(self, path) -> str:
         """ Lookup path and return its handler """
-        # TODO: return None if not found or return a "not found" handler
-        # TODO: Bonus - path works with/without trailing slash e.g. "/about" & "/about/" return /about handler
-        pass
+        path_parts = self.split_path(path)                  # Splits parts into constituent components
+        handler = self.route_trie.find(path_parts)          # Stores result of path search
+        return handler if handler else self.path_not_found  # Returns handler if there's a match, else 404 error
 
     @staticmethod
-    def split_path(path: str):
+    def split_path(path: str) -> List[str]:
         """ Splits path into its constituent parts """
-        return [part for part in path.split('/') if part]
+        return [part for part in path.split('/') if part]   # Splits path at '/', handles extra slashes in the process
 
 
-# create the router and add a route
-router = Router("root handler", "not found handler")    # remove the 'not found handler' if you did not implement this
-router.add_handler("/home/about", "about handler")      # add a route
+router = Router("root handler", "Error 404: Page not found")    # Create a router
+router.add_handler("/home/about", "about handler")              # Add a route
 
-# some lookups with the expected output
-print(router.lookup("/"))               # should print 'root handler'
-print(router.lookup("/home"))           # should print 'not found handler' or None if you did not implement one
-print(router.lookup("/home/about"))     # should print 'about handler'
-print(router.lookup("/home/about/"))    # should print 'about handler' or None if you did not handle trailing slashes
-print(router.lookup("/home/about/me"))  # should print 'not found handler' or None if you did not implement one
+print(router.lookup("/"))                 # Should Return: 'root handler'
+print(router.lookup("/home"))             # Should Return: 'Error 404: Page not found'
+print(router.lookup("/home/about"))       # Should Return: 'about handler'
+print(router.lookup("/home/about/"))      # Should Return: 'about handler'
+print(router.lookup("/home/about/me"))    # Should Return: 'Error 404: Page not found'
