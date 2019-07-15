@@ -8,10 +8,13 @@ def get_min_max(ints):
     Args:
        ints(list): list of integers containing one or more integers
     """
-    max = 0
-    min = 0
+    min, max = 0, 0
 
     for number in ints:
+
+        if type(number) != int:
+            print('Warning: Cannot compare something that is not an integer')
+            return
 
         if number >= max:
             max = number
