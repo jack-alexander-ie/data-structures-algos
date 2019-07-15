@@ -22,8 +22,8 @@ class Trie:
 
         for index, char in enumerate(word):                  # 1. Assess each character in the input word
             current_node = current_node.children[char]       # 2. Update the node to point it to the next node
-            if index is last_index:
-                current_node.is_word = True                  # 3. Set the characters end_word bool to true
+            if index is last_index:                          # 3. Set to true if last character is in the word
+                current_node.is_word = True                  # 4. Flip char's is_word bool to denote complete word
 
     def exists(self, word):
         """
