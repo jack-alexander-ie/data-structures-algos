@@ -22,7 +22,7 @@ class TrieNode:
         else:
             self.children[char] = TrieNode()    # Add character if it doesn't exist
 
-    def suffixes(self, suffix=''):
+    def suffixes(self, suffix: str = '') -> list:
         """ Recursively collects all the suffixes for a given node """
         suffix_list = []
         for key, child_node in self.children.items():
