@@ -1,26 +1,24 @@
-"""
-Given an input array consisting on only 0, 1, and 2, sort the array in a single traversal. You're not allowed to use
-any sorting function that Python provides.
-
-Note: O(n) does not necessarily mean single-traversal. For e.g. if you traverse the array twice, that would still be an
-O(n) solution but it will not count as single traversal.
-"""
+from typing import List
 
 
-def sort_012(input_list: list):
-    """
-    Given an input array consisting on only 0, 1, and 2, sort the array in a single traversal.
+def validate_value(test_value: int):
+    if type(test_value) is not int or test_value < 0 or test_value > 2:
+        print('Warning: Invalid value, cannot complete sorting')
+        return False
+    return True
 
-    Args:
-       input_list(list): List to be sorted
-    """
-    # initialize pointers for next positions of 0 and 2
-    next_pos_0 = 0
-    next_pos_2 = len(input_list) - 1
 
+def sort_012(input_list: List[int]):
+    """ Sorts an array consisting of on only 0's, 1's, and 2's in a single traversal """
+    next_pos_0, next_pos_2 = 0, len(input_list) - 1     # Initialize pointers for next positions of 0 and 2
     front_index = 0
-
     while front_index <= next_pos_2:
+
+        # Test values to make sure they're valid
+        assert validate_value(input_list[front_index])
+        assert validate_value(input_list[next_pos_0])
+        assert validate_value(input_list[next_pos_2])
+
         if input_list[front_index] == 0:
             input_list[front_index] = input_list[next_pos_0]
             input_list[next_pos_0] = 0
@@ -32,7 +30,6 @@ def sort_012(input_list: list):
             next_pos_2 -= 1
         else:
             front_index += 1
-
     return input_list
 
 
@@ -44,6 +41,13 @@ def test_function(test_case):
         print("Fail")
 
 
-test_function([0, 0, 2, 2, 2, 1, 1, 1, 2, 0, 2])
-test_function([2, 1, 2, 0, 0, 2, 1, 0, 1, 0, 0, 2, 2, 2, 1, 2, 0, 0, 0, 2, 1, 0, 2, 0, 0, 1])
-test_function([0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2])
+# Test Cases - All should pass
+# test_function([0, 0, 2, 2, 2, 1, 1, 1, 2, 0, 2])
+# test_function([2, 1, 2, 0, 0, 2, 1, 0, 1, 0, 0, 2, 2, 2, 1, 2, 0, 0, 0, 2, 1, 0, 2, 0, 0, 1])
+# test_function([0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2])
+
+# Test Case - Invalid list values, all should fail
+# test_function([0, 0, 2, 2, 2, 1, 1, 1, 2, 0, 3])    # Expected: Warning: Invalid value, cannot complete sorting
+# test_function([0, 0, -1, 2, 2, 1, 1, 1, 2, 0, 2])   # Expected: Warning: Invalid value, cannot complete sorting
+# test_function([0, 0, 2, 2, 2, 1, 1, 1.0, 2, 0, 2])  # Expected: Warning: Invalid value, cannot complete sorting
+# test_function([0, 0, 2, 'c', 2, 1, 1, 1, 2, 0, 2])  # Expected: Warning: Invalid value, cannot complete sorting
