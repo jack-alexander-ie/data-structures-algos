@@ -48,33 +48,45 @@ class Router:
 
     def __init__(self, root_handler, path_not_found):
         """ Creates a new RouteTrie for holding routes """
-        self.route_trie = RouteTrie(root_handler)           # Passes root handler to the initialised trie
-        self.path_not_found = path_not_found                # Stores 404 not found response
+        if self.test_path(root_handler) and self.test_path(path_not_found):
+            self.route_trie = RouteTrie(root_handler)           # Passes root handler to the initialised trie
+            self.path_not_found = path_not_found                # Stores 404 not found response
 
     def add_handler(self, path, handler) -> None:
         """ Adds a handler for a path """
-        path_parts = self.split_path(path)                  # Splits parts into constituent components
-        self.route_trie.insert(path_parts, handler)         # Passes parts on for addition to the trie
+        if self.test_path(path) and self.test_path(handler):
+            path_parts = self.split_path(path)                  # Splits parts into constituent components
+            self.route_trie.insert(path_parts, handler)         # Passes parts on for addition to the trie
 
     def lookup(self, path) -> str:
         """ Lookup path and return its handler """
-        path_parts = self.split_path(path)                  # Splits parts into constituent components
-        handler = self.route_trie.find(path_parts)          # Stores result of path search
-        return handler if handler else self.path_not_found  # Returns handler if there's a match, else 404 error
+        if self.test_path(path):
+            path_parts = self.split_path(path)                  # Splits parts into constituent components
+            handler = self.route_trie.find(path_parts)          # Stores result of path search
+            return handler if handler else self.path_not_found  # Returns handler if there's a match, else 404 error
 
     @staticmethod
     def split_path(path: str) -> List[str]:
         """ Splits path into its constituent parts """
         return [part for part in path.split('/') if part]   # Splits path at '/', handles extra slashes in the process
 
+    @staticmethod
+    def test_path(path):
+        if type(path) is not str:
+            print('Warning: Input path must be a string')
+            exit()
+        return True
+
 
 router = Router("root handler", "Error 404: Page not found")    # Create a router
 router.add_handler("/home/about", "about handler")              # Add a route
 
 # Test Cases
-print(router.lookup("/"))                 # Expected: 'root handler'
-print(router.lookup("/home"))             # Expected: 'Error 404: Page not found'
-print(router.lookup("/home/about"))       # Expected: 'about handler'
-print(router.lookup("/home/about/"))      # Expected: 'about handler'
-print(router.lookup("/home/about/me"))    # Expected: 'Error 404: Page not found'
-print(router.lookup(""))                  # Expected: 'root handler'
+# print(router.lookup("/"))                 # Expected: 'root handler'
+# print(router.lookup("/home"))             # Expected: 'Error 404: Page not found'
+# print(router.lookup("/home/about"))       # Expected: 'about handler'
+# print(router.lookup("/home/about/"))      # Expected: 'about handler'
+# print(router.lookup("/home/about/me"))    # Expected: 'Error 404: Page not found'
+# print(router.lookup(""))                  # Expected: 'root handler'root handler
+# print(router.lookup(3))                   # Expected: 'Warning: Input path must be a string'
+# print(router.add_handler(3, 'handler'))   # Expected: 'Warning: Input path must be a string'
