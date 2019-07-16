@@ -16,24 +16,19 @@ class TrieNode:
             print('Warning: Cannot add empty character to node')
             return
 
-        if char in self.children:               # Character is valid, check if it already exists
+        if char in self.children:               # Character is valid, check if already exists
             print('Warning: Character already exists - please insert another')
             return
         else:
             self.children[char] = TrieNode()    # Add character if it doesn't exist
 
-    def suffixes(self, suffix: str = '', suffix_list=[]):
+    def suffixes(self, suffix=''):
         """ Recursively collects all the suffixes for a given node """
-
-        for child, node in self.children.items():
-
-            if node.is_word:
-                # Append to suffixes
-                suffix_list.append(suffix + node.char)
-
-            if node.children is not None:
-                node.suffixes(suffix + node.char, suffix_list)
-
+        suffix_list = []
+        for key, child_node in self.children.items():
+            if child_node.is_word:
+                suffix_list.append(suffix + child_node.char)
+            suffix_list.extend(child_node.suffixes(suffix + child_node.char))
         return suffix_list
 
 
@@ -75,7 +70,7 @@ MyTrie = Trie()
 
 word_list = [
     "ant", "anthology", "antagonist", "antonym",
-    "fun", "function", "factor", "factory", "factorial", "fart",
+    "fun", "function", "factor", "factory", "factorial",
     "trie", "trigger", "trigonometry", "tripod"
 ]
 
@@ -83,7 +78,9 @@ for word in word_list:
     MyTrie.insert(word)
 
 parent_node = MyTrie.find('f')
-
 suffixes = parent_node.suffixes()
-
 print(suffixes)
+
+other_node = MyTrie.find('a')
+other_suffixes = other_node.suffixes()
+print(other_suffixes)
