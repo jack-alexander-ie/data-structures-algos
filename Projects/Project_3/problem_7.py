@@ -71,7 +71,7 @@ class Router:
         return [part for part in path.split('/') if part]   # Splits path at '/', handles extra slashes in the process
 
     @staticmethod
-    def __test_path(path):
+    def __test_path(path: str) -> bool:
         if type(path) is not str:
             print('Warning: Input path must be a string')
             exit()
