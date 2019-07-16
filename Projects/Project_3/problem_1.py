@@ -29,4 +29,4 @@ def sqrt(number: int) -> int:
 # print("Pass" if (100 == sqrt(10000)) else "Fail")
 
 # Test Case - Input not an integer
-sqrt('a')   # Output should be 'Warning: Input can only be an integer'
+# sqrt('a')   # Output should be 'Warning: Input can only be an integer'
