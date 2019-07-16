@@ -71,8 +71,10 @@ class Router:
 router = Router("root handler", "Error 404: Page not found")    # Create a router
 router.add_handler("/home/about", "about handler")              # Add a route
 
-print(router.lookup("/"))                 # Should Return: 'root handler'
-print(router.lookup("/home"))             # Should Return: 'Error 404: Page not found'
-print(router.lookup("/home/about"))       # Should Return: 'about handler'
-print(router.lookup("/home/about/"))      # Should Return: 'about handler'
-print(router.lookup("/home/about/me"))    # Should Return: 'Error 404: Page not found'
+# Test Cases
+print(router.lookup("/"))                 # Expected: 'root handler'
+print(router.lookup("/home"))             # Expected: 'Error 404: Page not found'
+print(router.lookup("/home/about"))       # Expected: 'about handler'
+print(router.lookup("/home/about/"))      # Expected: 'about handler'
+print(router.lookup("/home/about/me"))    # Expected: 'Error 404: Page not found'
+print(router.lookup(""))                  # Expected: 'root handler'
