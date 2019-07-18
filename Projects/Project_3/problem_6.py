@@ -7,7 +7,7 @@ def get_min_max(ints: List[int]) -> Tuple[int, int]:
     if len(ints) < 1:
         print('Warning: Cannot operate on an empty list')
         return 0, 0
-    min_val, max_val = random.choice(ints), 0
+    min_val, max_val = ints[0], 0
     for number in ints:
         if type(number) != int:
             print('Warning: Cannot compare a value that is not an integer')
