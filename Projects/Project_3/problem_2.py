@@ -1,65 +1,73 @@
 from typing import List
 
 
-class NonIntegerException(Exception):
-    print('Warning: List element tested that is not an integer')
-    exit()
+def test_ints(*numbers):
+    """ Tests values to make sure they're integers, exits if any are not """
+    for number in numbers:
+        if type(number) is not int:
+            print('Warning: Element tested that is not an integer, exiting...')
+            exit()
 
 
-def rotated_array_search(input_list: List[int], number: int) -> int:
-    """ Searches for an element in a rotated array """
-    if type(number) is not int:
-        print('Warning: The target value must be an integer')
+def rotated_array_search(input_list: List[int], target: int) -> int:
+    """
+    Searches for an element in a rotated array
+
+    :param input_list: list of integers to search
+    :param target: the number to search for
+    :return: the index of the target in the array, if found
+    """
+    test_ints(target)                                                   # Test target variable to ensure it's an int
+    if input_list is None or len(input_list) is 0:                      # Tests if the list is empty
         return -1
-    if input_list is None or len(input_list) is 0:
-        return -1
-    pivot_index = find_pivot(input_list)
-    array_one, array_two = input_list[:pivot_index], input_list[pivot_index:]
-    result_one = binary_search_recursive(array_one, number, 0, len(array_one) - 1)
-    if input_list[result_one] == number:
-        return result_one
-    else:
-        result_two = binary_search_recursive(array_two, number, 0, len(array_two) - 1)
-        if result_two == -1:
-            return -1
-        return len(array_one) + result_two
+    piv_idx = find_pivot(input_list)                                    # Finds the pivot index
+    arr_one = input_list[:piv_idx]                                      # Grabs elements until the pivot index
+    arr_two = input_list[piv_idx:]                                      # Grabs from the pivot index
+    arr_one_idx = bin_search_rec(arr_one, target, 0, len(arr_one) - 1)  # Returns index of target if found
+    if input_list[arr_one_idx] is target:                               # Found in arr_one, return it's index
+        return arr_one_idx
+    else:                                                               # If not, search for it in arr_two
+        arr_two_idx = bin_search_rec(arr_two, target, 0, len(arr_two) - 1)
+        if arr_two_idx == -1:
+            return -1                                                   # Not found in either, return -1
+        return len(arr_one) + arr_two_idx                               # Found in arr_two, return it's adjusted index
 
 
-def find_pivot(list_of_nums: List[int]) -> int:
-    """ Find the pivot point in an array """
-    if list_of_nums[0] <= list_of_nums[- 1]:  # Test if list is rotated
+def find_pivot(list_nums: List[int]) -> int:
+    """
+    Performs binary search to find the pivot index of a rotated array, if one exists.
+
+    :param list_nums: list of numbers in which to find the pivot
+    :return: the index position of the pivot
+    """
+    if list_nums[0] <= list_nums[- 1]:                                # Test if list is rotated
         return 0
-    low, high = 0, len(list_of_nums) - 1
+    low, high = 0, len(list_nums) - 1
     while low <= high:
         mid = (low + high) // 2
-
-        # Ensure pivot element is an integer
-        if type(list_of_nums[low]) is not int and type(list_of_nums[mid]) is not int and type(
-                list_of_nums[high]) is not int:
-            raise NonIntegerException()
-
-        if list_of_nums[mid] > list_of_nums[mid + 1]:
-            return mid + 1
-        elif list_of_nums[low] <= list_of_nums[mid]:
+        test_ints(list_nums[low], list_nums[mid], list_nums[high])    # Ensure pivot element is an integer
+        if list_nums[mid] > list_nums[mid + 1]:                       # If centre val > value to it's right...
+            return mid + 1                                            # ...return index of element to its right
+        elif list_nums[low] <= list_nums[mid]:                        # Move right
             low = mid + 1
         else:
-            high = mid - 1
+            high = mid - 1                                            # Move left
 
 
-def binary_search_recursive(array: List[int], target: int, start_index: int, end_index: int) -> int:
-    """ Recursively searches for match to the target """
-    centre_index = (start_index + end_index) // 2
-    test_val = array[centre_index]
-    if type(test_val) is not int: raise NonIntegerException()  # Ensure test element is an integer
-    if target == test_val:
+def bin_search_rec(array: List[int], target: int, start_index: int, end_index: int) -> int:
+    """ Performs recursive binary search to seek target """
+    centre_index = (start_index + end_index) // 2                     # Grab centre index
+    centre_val = array[centre_index]                                  # Grab it's value
+    test_ints(centre_val)                                             # Test if value's an integer
+    if target == centre_val:                                          # If centre is the target, return it
         return centre_index
-    if start_index <= end_index:
-        if target < test_val:
-            end_index = centre_index - 1
-        else:
+    if start_index <= end_index:                                      # Move start and end 'window'
+        if target < centre_val:                                       # If target < centre val...
+            end_index = centre_index - 1                              # ...move left
+        else:                                                         # ...move right
             start_index = centre_index + 1
-        return binary_search_recursive(array, target, start_index, end_index)
-    return -1
+        return bin_search_rec(array, target, start_index, end_index)  # Keep searching
+    return -1                                                         # Not found, return -1
 
 
 # Test Cases - All pass
@@ -70,7 +78,9 @@ def binary_search_recursive(array: List[int], target: int, start_index: int, end
 # print("Pass" if (-1 == rotated_array_search([6, 7, 8, 1, 2, 3, 4], 10)) else "Fail")
 
 # Test Case - Non-integer target
-# rotated_array_search([6, 7, 8, 9, 10, 1, 2, 3, 4], 'a')   # Expected: 'Warning: The target value must be an integer'
+# rotated_array_search([6, 7, 8, 9, 10, 1, 2, 3, 4], 'a')
+# Expected: 'Warning: Element tested that is not an integer, exiting...'
 
 # Test Case - Element in the list is not an integer
-rotated_array_search([6, 7, 8, 9, 'c', 1, 2, 3, 4], 6)  # Expected: 'Warning: List element tested that is not an integer'
+# rotated_array_search([6, 7, 8, 9, 'c', 1, 2, 3, 4], 6)
+# Expected: 'Warning: Element tested that is not an integer, exiting...'
