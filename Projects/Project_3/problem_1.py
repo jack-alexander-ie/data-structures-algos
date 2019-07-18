@@ -3,8 +3,8 @@ def sqrt(number: int) -> int:
         print('Warning: Input can only be an integer')
         return 0
     if number < 2:                              # No root
-        return number                           # Return itself as only square
-    low, high = 1, number//2                    # Square root cannot be more than number/2
+        return number                           # Return itself
+    low, high = 1, number//2                    # Square root cannot be more than num/2
     result = 0
     while low <= high:
         mid_value = (low + high) // 2           # Center value
