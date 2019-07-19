@@ -40,8 +40,8 @@ def find_pivot(list_nums: List[int]) -> int:
     :param list_nums: list of numbers in which to find the pivot
     :return: the index position of the pivot
     """
-    if list_nums[0] <= list_nums[- 1]:                                # Test if list is rotated
-        return 0
+    if list_nums[0] <= list_nums[- 1]:                                # Test if list is rotated, return its midpoint
+        return len(list_nums) - 1 // 2
     low, high = 0, len(list_nums) - 1
     while low <= high:
         mid = (low + high) // 2
@@ -84,3 +84,6 @@ def bin_search_rec(array: List[int], target: int, start_index: int, end_index: i
 # Test Case - Element in the list is not an integer
 # rotated_array_search([6, 7, 8, 9, 'c', 1, 2, 3, 4], 6)
 # Expected: 'Warning: Element tested that is not an integer, exiting...'
+
+# Test Case - Array not rotated
+print("Pass" if (0 == rotated_array_search([1, 2, 3, 4, 5, 6, 7], 1)) else "Fail")
