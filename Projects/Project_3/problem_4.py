@@ -10,7 +10,7 @@ def validate_value(test_value: int):
 
 def sort_012(input_list: List[int]):
     """ Sorts an array consisting of on only 0's, 1's, and 2's in a single traversal """
-    next_pos_0, next_pos_2 = 0, len(input_list) - 1     # Initialize pointers for next positions of 0 and 2
+    next_pos_0, next_pos_2 = 0, len(input_list) - 1             # Init pointers for next positions of 0 & 2
     front_index = 0
     while front_index <= next_pos_2:
 
