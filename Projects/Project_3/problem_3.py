@@ -7,6 +7,9 @@ def test_list(list_ints: List[int]) -> bool:
         if type(element) is not int:
             print('Warning: One or more of the elements in the list is not an integer')
             return True
+    if len(list_ints) < 1:
+        print('Warning: Empty list detected')
+        return True
     return False
 
 
@@ -79,16 +82,17 @@ def test_function(test_case):
 
 
 # Test Cases - Both should pass
-# test_function([[1, 2, 3, 4, 5], [542, 31]])         # Expected output: Pass
-# test_function([[4, 6, 2, 5, 9, 8], [964, 852]])     # Expected output: Pass
+test_function([[1, 2, 3, 4, 5], [542, 31]])         # Expected: Pass
+test_function([[4, 6, 2, 5, 9, 8], [964, 852]])     # Expected: Pass
 
 # Test Case - Non-integer input
-# test_function([[1, 2, 'a', 4, 5], [542, 31]])
-# Expected output: Warning: One or more of the elements in the list is not an integer
+test_function([[1, 2, 'a', 4, 5], [0, 0]])
+# Expected: 'Warning: One or more of the elements in the list is not an integer', Pass
 
 # Test Case - Large Input
-# test_arr, rotation_index = [number for number in range(1, 36)], 15
-# test_rotated_arr = test_arr[rotation_index:] + test_arr[:rotation_index]
-# print(test_rotated_arr)
-# print(rearrange_digits(test_rotated_arr))
-# Expected Output: [35333129272523211917151311, 34323028262422201816141210]
+test_arr, rotation_index = [number for number in range(1, 36)], 15
+test_rotated_arr = test_arr[rotation_index:] + test_arr[:rotation_index]
+test_function([test_rotated_arr, [35333129272523211917151311, 34323028262422201816141210]])     # Expected: Pass
+
+# Test Case - No input
+test_function([[], [0, 0]])     # Expected: 'Warning: Empty list detected', Pass
