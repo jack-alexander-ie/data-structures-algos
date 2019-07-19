@@ -18,15 +18,16 @@ def sqrt(number: int) -> int:
             high = mid_value - 1
     return result
 
+
 # Test Cases - All should pass
-# print("Pass" if (3 == sqrt_rec(9)) else "Fail")
-# print("Pass" if (0 == sqrt_rec(0)) else "Fail")
-# print("Pass" if (4 == sqrt_rec(16)) else "Fail")
-# print("Pass" if (1 == sqrt_rec(1)) else "Fail")
-# print("Pass" if (5 == sqrt_rec(27)) else "Fail")
+print("Pass" if (3 == sqrt(9)) else "Fail")
+print("Pass" if (0 == sqrt(0)) else "Fail")
+print("Pass" if (4 == sqrt(16)) else "Fail")
+print("Pass" if (1 == sqrt(1)) else "Fail")
+print("Pass" if (5 == sqrt(27)) else "Fail")
 
 # Test Case - Large numbers should pass too
-# print("Pass" if (100 == sqrt(10000)) else "Fail")
+print("Pass" if (100 == sqrt(10000)) else "Fail")
 
 # Test Case - Input not an integer
-# sqrt('a')   # Output should be 'Warning: Input can only be an integer'
+sqrt('a')   # Output should be 'Warning: Input can only be an integer'
