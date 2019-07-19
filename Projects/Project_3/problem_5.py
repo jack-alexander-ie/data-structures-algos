@@ -9,18 +9,12 @@ class TrieNode:
 
     def insert(self, char: str) -> None:
         """ Adds a child node to a TrieNode """
-        if len(char) > 1:
-            print('Warning: Cannot add string to node - must be single character')
-            return
-        elif len(char) < 1:
-            print('Warning: Cannot add empty character to node')
-            return
-
-        if char in self.children:               # Character is valid, check if already exists
-            print('Warning: Character already exists - please insert another')
-            return
-        else:
-            self.children[char] = TrieNode()    # Add character if it doesn't exist
+        if self.test_char(char):                    # Make sure char is valid
+            if char in self.children:               # Character is valid, check if already exists
+                print('Warning: Character already exists - please insert another')
+                return
+            else:
+                self.children[char] = TrieNode()    # Add character if it doesn't exist
 
     def suffixes(self, suffix: str = '') -> list:
         """ Recursively collects all the suffixes for a given node """
@@ -30,6 +24,16 @@ class TrieNode:
                 suffix_list.append(suffix + child_node.char)
             suffix_list.extend(child_node.suffixes(suffix + child_node.char))
         return suffix_list
+
+    @staticmethod
+    def test_char(char):
+        if len(char) > 1:
+            print('Warning: Cannot add string to node - must be single character')
+            return False
+        elif len(char) < 1:
+            print('Warning: Cannot add empty character to node')
+            return False
+        return True
 
 
 class Trie:
