@@ -1,3 +1,5 @@
+import time
+
 class GraphNode:
     def __init__(self, val):
         self.value = val
@@ -50,12 +52,17 @@ def dfs_search(root_node, search_value):
 
     while current_node:
         for child in current_node.children:
+
+            print(child.value)
+
             if child.value is search_value:
                 print("Search successful, found '" + search_value + "', returning the node")
                 return child
             current_node = child
 
+            time.sleep(2)
+
 
 # assert nodeA == dfs_search(nodeS, 'A')
-assert nodeS == dfs_search(nodeP, 'S')
+assert nodeS == dfs_search(nodeP, 'S')      # Cyclic route happening -> P, R, H, G
 # assert nodeR == dfs_search(nodeH, 'R')
