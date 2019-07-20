@@ -45,4 +45,17 @@ graph1.add_edge(nodeS, nodeR)
 
 def dfs_search(root_node, search_value):
     """ Executes a depth first search of a graph """
-    pass
+
+    current_node = root_node
+
+    while current_node:
+        for child in current_node.children:
+            if child.value is search_value:
+                print("Search successful, found '" + search_value + "', returning the node")
+                return child
+            current_node = child
+
+
+# assert nodeA == dfs_search(nodeS, 'A')
+assert nodeS == dfs_search(nodeP, 'S')
+# assert nodeR == dfs_search(nodeH, 'R')
