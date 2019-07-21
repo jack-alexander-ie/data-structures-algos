@@ -1,5 +1,6 @@
 import time
 
+
 class GraphNode:
     def __init__(self, val):
         self.value = val
@@ -11,6 +12,10 @@ class GraphNode:
     def remove_child(self, del_node):
         if del_node in self.children:
             self.children.remove(del_node)
+
+    def print_children(self):
+        for child in self.children:
+            print('Current Nodes Child:', child.value)
 
 
 class Graph:
@@ -51,16 +56,19 @@ def dfs_search(root_node, search_value):
     current_node = root_node
 
     while current_node:
-        for child in current_node.children:
 
-            print(child.value)
+        print('Current Node:', current_node.value)
+        current_node.print_children()
+        print('\n')
+
+        for child in current_node.children:
 
             if child.value is search_value:
                 print("Search successful, found '" + search_value + "', returning the node")
                 return child
             current_node = child
 
-            time.sleep(2)
+            time.sleep(1)
 
 
 # assert nodeA == dfs_search(nodeS, 'A')
