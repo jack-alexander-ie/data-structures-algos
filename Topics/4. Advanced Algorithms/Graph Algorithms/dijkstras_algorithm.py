@@ -66,11 +66,13 @@ graph.add_edge(node_y, node_t, 5)
 
 def dijkstra(start_node: GraphNode, end_node: GraphNode) -> int:
     distance_dict = {node: math.inf for node in graph.nodes}
+
     shortest_path_to_node = {}
 
     distance_dict[start_node] = 0
+
     while distance_dict:
-        # Pop the shorest path
+        # Pop the shortest path
         current_node, node_distance = sorted(distance_dict.items(), key=lambda x: x[1])[0]
         shortest_path_to_node[current_node] = distance_dict.pop(current_node)
 
