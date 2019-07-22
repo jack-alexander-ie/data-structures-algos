@@ -1,6 +1,3 @@
-import time
-
-
 class GraphNode:
     def __init__(self, val):
         self.value = val
@@ -50,27 +47,36 @@ graph1.add_edge(nodeH, nodeP)
 graph1.add_edge(nodeS, nodeR)
 
 
-def dfs_search(root_node, search_value):
+def dfs_search(root: GraphNode, target: any) -> Node:
     """ Executes a depth first search of a graph """
 
-    current_node = root_node
+    visited_stack = []
+
+    current_node = root
 
     while current_node:
 
-        print('Current Node:', current_node.value)
-        current_node.print_children()
-        print('\n')
+        if current_node.value is target:      # Check if current node is target value
+            return current_node
 
-        for child in current_node.children:
+        if current_node not in visited_stack:       # Add it to the stack
+            visited_stack.append(current_node)
 
-            if child.value is search_value:
-                print("Search successful, found '" + search_value + "', returning the node")
-                return child
-            current_node = child
+        if current_node.children is not []:         # Check if it has children
 
-            time.sleep(1)
+            for child in current_node.children:     # Choose an edge
+
+                if child not in visited_stack:      # Only visit if it's not already in the stack
+
+                    if child.value is target:       # Return the node if target found
+                        return child
+
+                    current_node = child
+        else:
+
+            current_node = visited_stack.pop()      # Go back to previous node if no children
 
 
-# assert nodeA == dfs_search(nodeS, 'A')
-assert nodeS == dfs_search(nodeP, 'S')      # Cyclic route happening -> P, R, H, G
-# assert nodeR == dfs_search(nodeH, 'R')
+assert nodeA == dfs_search(nodeS, 'A')
+assert nodeS == dfs_search(nodeP, 'S')
+assert nodeR == dfs_search(nodeH, 'R')
