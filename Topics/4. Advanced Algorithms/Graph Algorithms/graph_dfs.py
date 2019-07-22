@@ -47,7 +47,7 @@ graph1.add_edge(nodeH, nodeP)
 graph1.add_edge(nodeS, nodeR)
 
 
-def dfs_search(root: GraphNode, target: any) -> Node:
+def dfs_search_test(root: GraphNode, target: any) -> GraphNode:
     """ Executes a depth first search of a graph """
 
     visited_stack = []
@@ -77,6 +77,6 @@ def dfs_search(root: GraphNode, target: any) -> Node:
             current_node = visited_stack.pop()      # Go back to previous node if no children
 
 
-assert nodeA == dfs_search(nodeS, 'A')
-assert nodeS == dfs_search(nodeP, 'S')
-assert nodeR == dfs_search(nodeH, 'R')
+assert nodeA == dfs_search_test(nodeS, 'A')
+assert nodeS == dfs_search_test(nodeP, 'S')
+assert nodeR == dfs_search_test(nodeH, 'R')
