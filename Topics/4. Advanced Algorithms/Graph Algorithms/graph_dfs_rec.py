@@ -28,6 +28,24 @@ class Graph:
             node1.remove_child(node2)
             node2.remove_child(node1)
 
+    @staticmethod
+    def dfs_print(start_node):
+
+        visited = {}
+
+        def dfs_rec(node, visited):
+            if node == None:
+                return False
+
+            visited[node.value] = True
+            print(node.value)
+
+            for each in node.children:
+                if each.value not in visited:
+                    dfs_rec(each, visited)
+
+        dfs_rec(start_node, visited)
+
 
 nodeG = Node('G')
 nodeR = Node('R')
@@ -58,24 +76,4 @@ def test_graph(graph):
 
 # test_graph(graph1)
 
-
-def dfs_recursion_start(self, start_node):
-    visited = {}
-    self.dfs_recursion(start_node, visited)
-
-
-def dfs_recursion(self, node, visited):
-    if node == None:
-        return False
-
-    visited[node.value] = True
-    print(node.value)
-
-    for each in node.children:
-        if (each.value not in visited):
-            self.dfs_recursion(each, visited)
-
-
-Graph.dfs_recursion_start = dfs_recursion_start
-Graph.dfs_recursion = dfs_recursion
-graph1.dfs_recursion_start(nodeG)
+graph1.dfs_print(nodeG)
