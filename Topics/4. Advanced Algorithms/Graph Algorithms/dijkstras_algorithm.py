@@ -74,13 +74,28 @@ def dijkstra(start_node: GraphNode, end_node: GraphNode) -> int:
     while distance_dict:
         # Pop the shortest path
         current_node, node_distance = sorted(distance_dict.items(), key=lambda x: x[1])[0]
+
         shortest_path_to_node[current_node] = distance_dict.pop(current_node)
 
+        print('Current Node:', current_node.value, node_distance, '\n')
+
+        for node in distance_dict.items():
+            print(node[0].value, node[1])
+
+        print('\n ---- \n')
+
         for edge in current_node.edges:
+
+            print('Edge:', edge, edge.distance)
+
             if edge.node in distance_dict:
+
                 new_node_distance = node_distance + edge.distance
+
                 if distance_dict[edge.node] > new_node_distance:
                     distance_dict[edge.node] = new_node_distance
+
+        print('\n Shortest Path Len:', shortest_path_to_node.items(), '\n')
 
     return shortest_path_to_node[end_node]
 
