@@ -100,4 +100,45 @@ def dijkstra(start_node: GraphNode, end_node: GraphNode) -> int:
     return shortest_path_to_node[end_node]
 
 
-print('Shortest Distance from {} to {} is {}'.format(node_u.value, node_y.value, dijkstra(node_u, node_y)))
+# print('Shortest Distance from {} to {} is {}'.format(node_u.value, node_y.value, dijkstra(node_u, node_y)))
+
+import heapq
+
+
+def dijkstra_prio(start_node: GraphNode, end_node: GraphNode) -> int:
+
+    """
+    This function needs to be converted so that it can be used for the connecting islands problem.
+
+    Refer back to notes.
+    """
+
+    heap = [(node, math.inf) for node in graph.nodes]
+
+    print(heap)
+
+    distance_dict = []
+
+    shortest_path_to_node = []
+
+    distance_dict[start_node] = 0
+
+    while distance_dict:
+
+        current_node, node_distance = sorted(distance_dict.items(), key=lambda x: x[1])[0]
+
+        shortest_path_to_node[current_node] = distance_dict.pop(current_node)
+
+        for edge in current_node.edges:
+
+            if edge.node in distance_dict:
+
+                new_node_distance = node_distance + edge.distance
+
+                if distance_dict[edge.node] > new_node_distance:
+                    distance_dict[edge.node] = new_node_distance
+
+    return shortest_path_to_node[end_node]
+
+
+print('Shortest Distance from {} to {} is {}'.format(node_u.value, node_y.value, dijkstra_prio(node_u, node_y)))
