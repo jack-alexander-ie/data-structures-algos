@@ -35,6 +35,7 @@ class Graph:
             node2.remove_child(node1)
 
 
+# Create all the nodes
 node_u = GraphNode('U')
 node_d = GraphNode('D')
 node_a = GraphNode('A')
@@ -43,7 +44,10 @@ node_i = GraphNode('I')
 node_t = GraphNode('T')
 node_y = GraphNode('Y')
 
+# Create the graph
 graph = Graph([node_u, node_d, node_a, node_c, node_i, node_t, node_y])
+
+# Add the edges
 graph.add_edge(node_u, node_a, 4)
 graph.add_edge(node_u, node_c, 6)
 graph.add_edge(node_u, node_d, 3)
@@ -65,42 +69,42 @@ graph.add_edge(node_y, node_t, 5)
 
 
 def dijkstra(start_node: GraphNode, end_node: GraphNode) -> int:
+
+    # Create a dict with nodes from the created graph, values for which are infinite
     distance_dict = {node: math.inf for node in graph.nodes}
 
+    # Dict to store the shortest path
     shortest_path_to_node = {}
 
+    # Set start nodes inf value to zero
     distance_dict[start_node] = 0
 
+    # while there are values in the dict
     while distance_dict:
-        # Pop the shortest path
+
+        # Sorts dict based on node weight - sorts from min, grabs 0th value and unpacks tuple to vars
         current_node, node_distance = sorted(distance_dict.items(), key=lambda x: x[1])[0]
 
+        # Add the min node to the shortest path by popping it out of the dict
         shortest_path_to_node[current_node] = distance_dict.pop(current_node)
 
-        print('Current Node:', current_node.value, node_distance, '\n')
-
-        for node in distance_dict.items():
-            print(node[0].value, node[1])
-
-        print('\n ---- \n')
-
+        # Cycle through the edges in the current node
         for edge in current_node.edges:
 
-            print('Edge:', edge, edge.distance)
-
+            # Check of the edges node exists in the distance dict
             if edge.node in distance_dict:
 
+                # Update all nodes with the latest distance
                 new_node_distance = node_distance + edge.distance
 
+                # Update the value of the node's distance if it's greater than the new distance
                 if distance_dict[edge.node] > new_node_distance:
                     distance_dict[edge.node] = new_node_distance
-
-        print('\n Shortest Path Len:', shortest_path_to_node.items(), '\n')
 
     return shortest_path_to_node[end_node]
 
 
-# print('Shortest Distance from {} to {} is {}'.format(node_u.value, node_y.value, dijkstra(node_u, node_y)))
+print('Shortest Distance from {} to {} is {}'.format(node_u.value, node_y.value, dijkstra(node_u, node_y)))
 
 import heapq
 
@@ -141,4 +145,4 @@ def dijkstra_prio(start_node: GraphNode, end_node: GraphNode) -> int:
     return shortest_path_to_node[end_node]
 
 
-print('Shortest Distance from {} to {} is {}'.format(node_u.value, node_y.value, dijkstra_prio(node_u, node_y)))
+# print('Shortest Distance from {} to {} is {}'.format(node_u.value, node_y.value, dijkstra_prio(node_u, node_y)))
