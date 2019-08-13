@@ -1,6 +1,6 @@
 import networkx as nx
 import pickle
-import chart_studio.plotly as py
+import plotly.plotly as py
 import random
 from plotly.graph_objs import *
 from plotly.offline import init_notebook_mode, plot, iplot
