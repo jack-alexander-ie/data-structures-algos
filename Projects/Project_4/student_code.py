@@ -51,8 +51,12 @@ def shortest_path(graph, start, goal):
 
     frontier = dict()                                               # init frontier - (cost, frontier)
     explored = [False for _ in range(len(graph.intersections)+1)]   # init explored
+
     frontier[start] = 0                                             # add the start to the set
     goal_coordinates = graph.intersections[goal]                    # goal coordinates
+
+    parents = dict()
+    parents[start] = start
 
     items = []                                                      # TODO: remove, debug only
 
