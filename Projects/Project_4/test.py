@@ -1,4 +1,5 @@
-from helpers import load_map
+from helpers import load_map, show_map
+import student_code
 
 MAP_40_ANSWERS = [
     (5, 34, [5, 16, 37, 12, 34]),
