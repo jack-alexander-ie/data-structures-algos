@@ -1,20 +1,9 @@
-from helpers import load_map
+from helpers import load_map, show_map
 import heapq
-from math import sin, cos, sqrt, atan2, radians
-
-map_40 = load_map('map-40.pickle')
+from math import sqrt, sin, cos, sqrt, atan2, radians
 
 
-def print_graph_info(graph):
-    for intersection in graph.intersections.items():
-        print('Intersection:', intersection)
-    print('-' * 20)
-    for road in graph.roads:
-        print('Road:', road)
-    print()
-
-
-def calc_distance(start_point, end_point):
+def calc_cost(start_point, end_point):
     """
     Helper function to calculate the dostance between two points.
     Ref. from https://stackoverflow.com/questions/19412462/getting-distance-between-two-points-based-on-latitude-longitude/43211266#43211266
@@ -31,67 +20,79 @@ def calc_distance(start_point, end_point):
     a = sin(dlat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dlon / 2) ** 2
     c = 2 * atan2(sqrt(a), sqrt(1 - a))
     distance = R * c
-    return distance
+    return int(distance)
 
 
-def manhattan_distance(a, b):
+def euclidean_distance(neighbour, goal):
     """
-    The heuristic function which calculates the Manhatten Distance
-    Ref. from https://www.redblobgames.com/pathfinding/a-star/implementation.html
-
-    :param a: goal coordinates
-    :param b: neighbour coordinates
-    :return: heuristic distance
+    A heuristic function which calculates the Euclidean Distance
+    :param neighbour: coordinates of the neighbouring vertex
+    :param goal: coordinates of the goal vertex
+    :return: the euclidean distance
     """
-    (x1, y1) = a
-    (x2, y2) = b
-    return abs(x1 - x2) + abs(y1 - y2)
+    x1, y1 = neighbour[0], neighbour[1]
+    x2, y2 = goal[0], goal[1]
+    return sqrt(((x1 - x2)**2) + ((y1 - y2)**2))
+
+
+def create_path(explored):
+
+    return explored.keys()
+
+    optimal_path = list()
+    while current.parent:
+        optimal_path.append(current)
+        current = current.parent
+    optimal_path.append(current)
+    return optimal_path[::-1]
 
 
 def shortest_path(graph, start, goal):
-    frontier = [(0, start)]                          # init frontier - (cost, frontier)
-    explored = [False for _ in graph.intersections]  # init dict to track explored vertices
-    current_cost = 0                                 # track the current cost
-    goal_coordinates = graph.intersections[goal]
-    path = []                                        # final path that will be returned
 
-    while len(frontier) > 0:
+    frontier = dict()                                               # init frontier - (cost, frontier)
+    explored = [False for _ in range(len(graph.intersections)+1)]   # init explored
+    frontier[start] = 0                                             # add the start to the set
+    goal_coordinates = graph.intersections[goal]                    # goal coordinates
 
-        # print('Prio queue:', frontier)
+    items = []                                                      # TODO: remove, debug only
 
-        cost, current_vertex = heapq.heappop(frontier)              # Grab prio vertex
+    while frontier:
 
-        current_coordinates = graph.intersections[current_vertex]   # Grab coordinates
+        current_intersection = min(frontier.keys(), key=(lambda k: frontier[k]))    # grab vertex with least f
+        current_cost = frontier[current_intersection]                               # grab cost
 
-        current_cost += cost                                        # add cost to total
+        items.append(current_intersection)                          # TODO: remove, debug only
 
-        if current_vertex == goal:                                  # break if goal reached
-            path.append(goal)
-            break
+        if current_intersection == goal:                            # if goal, create path & return it
+            # return create_path(explored)
+            return items                                            # TODO: remove, debug only
 
-        for neighbour in graph.roads[current_vertex]:               # for each neighbour
-            # f(n) = g(n) + h(n)
-            neighbour_coordinates = graph.intersections[neighbour]  # Grab coordinates
+        del frontier[current_intersection]                          # remove from frontier
+        explored[current_intersection] = True                       # mark explored
 
-            g = int(calc_distance(current_coordinates, neighbour_coordinates))  # Calc g(n)
+        current_coordinates = graph.intersections[current_intersection]  # grab its coordinates
 
-            #next_cost = current_cost + g
+        for neighbour in graph.roads[current_intersection]:         # for each neighbour
 
-            if not explored[neighbour]:
+            if explored[neighbour]:                                 # if explored, move to next
+                continue
 
-                # print(neighbour_cost, neighbour)
-                h = manhattan_distance(goal_coordinates, neighbour_coordinates)
-                f = g + h
+            neighbour_coordinates = graph.intersections[neighbour]  # grab neighbour coordinates
+            neighbour_g = current_cost + calc_cost(current_coordinates, neighbour_coordinates)  # calc g cost
 
-                heapq.heappush(frontier, (f, neighbour))
-                # heapq.heappush(frontier, (cost + neighbour_cost, neighbour))
+            if neighbour in frontier:
+                new_g = current_cost + neighbour_g
+                if frontier[neighbour] > new_g:
+                    frontier[neighbour] = new_g
+            else:
+                neighbour_h = euclidean_distance(neighbour_coordinates, goal_coordinates)
+                neighbour_f = neighbour_g + neighbour_h
+                frontier[neighbour] = neighbour_f
 
-                explored[current_vertex] = True                     # Add curr. vertex to explored
-
-        path.append(current_vertex)                         # Update path
-
-    return path
+    raise RuntimeError("No solution found")
 
 
-# shortest_path(map_40, 5, 34)
-print('Path:', shortest_path(map_40, 5, 34))
+map_40 = load_map('map-40.pickle')
+
+path = shortest_path(map_40, 5, 34)             # [5, 16, 37, 12, 34]
+show_map(map_40, start=5, goal=34, path=path)
