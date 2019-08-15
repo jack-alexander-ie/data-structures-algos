@@ -23,6 +23,9 @@ class Node:
     def __gt__(self, other):
         return self.f > other.f
 
+    def __hash__(self):
+        return hash(self.position)
+
 
 def distance(neighbour: List[float], goal: List[float]) -> float:
     """
@@ -64,14 +67,26 @@ def shortest_path(graph: Map, start: int, goal: int) -> List[int]:
 
     start_node = Node(None, start)                                                # create the start node
 
-    frontier = [start_node]                                                       # init frontier with start node
+    frontier = set()                                                              # init the frontier
+    frontier.add(start_node)                                                      # add the start node
+
+    # frontier = dict()
+    # frontier[start] = start_node
+
     explored = [False for _ in range(len(graph.intersections)+1)]                 # init explored
 
     goal_coordinates = graph.intersections[goal]                                  # goal coordinates
 
     while frontier:
 
-        current_intersection = heapq.heappop(frontier)                            # pop off vertex with least f
+        current_intersection = min(frontier, key=lambda o: o.f)                   # grab vertex with least f
+        frontier.remove(current_intersection)                                     # remove it from the frontier
+
+        # print('Current:', current_intersection.position,
+        #       '\t F:', str(current_intersection.f),
+        #       '\t G:', str(current_intersection.g),
+        #       '\t H:', str(current_intersection.h), '\n')
+
         explored[current_intersection.position] = True                            # mark explored
 
         if current_intersection.position == goal:                                 # if goal reached...
@@ -86,21 +101,28 @@ def shortest_path(graph: Map, start: int, goal: int) -> List[int]:
 
             neighbour_coordinates = graph.intersections[neighbour]                # grab neighbour coordinates
             neighbour_node = Node(current_intersection, neighbour)                # create neighbour node
-
             neighbour_node.g = current_intersection.g + distance(current_coordinates, neighbour_coordinates)
             neighbour_node.h = distance(neighbour_coordinates, goal_coordinates)
             neighbour_node.f = neighbour_node.g + neighbour_node.h
 
             if neighbour_node in frontier:                                        # neighbour in frontier
                 new_g = current_intersection.g + neighbour_node.g                 # calc new g
-                if neighbour_node.g > new_g:                                      # if new g < neighbours old g...
-                    neighbour_node.g = new_g                                      # ...update neighbours old g (better)
+                if new_g < neighbour_node.g:                                      # if new g < neighbours old g...
+                    neighbour_node.g = new_g                                      # ...update old g (better path)
 
-            heapq.heappush(frontier, neighbour_node)                              # add neighbour to frontier
+            frontier.add(neighbour_node)                                          # add neighbour to frontier
+
+        #     print('Neighbour:', neighbour_node.position,
+        #           '\t F:', str(neighbour_node.f),
+        #           '\t G:', str(neighbour_node.g),
+        #           '\t H:', str(neighbour_node.h))
+        # print()
+        # print('-'*20, '\n')
 
     raise RuntimeError("No solution found")
 
 
+print()
 map_40 = load_map('map-40.pickle')
 print('Path:', shortest_path(map_40, 5, 34), '\n')      # [5, 16, 37, 12, 34]
 print('Path:', shortest_path(map_40, 5, 5), '\n')       # [5]
