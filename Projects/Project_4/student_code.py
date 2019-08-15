@@ -1,3 +1,7 @@
+# Ref. 1: https://gist.github.com/jamiees2/5531924
+# Ref. 2: https://medium.com/@nicholas.w.swift/easy-a-star-pathfinding-7e6689c7f7b2
+# Ref. 3: https://medium.com/@nicholas.w.swift/easy-a-star-pathfinding-7e6689c7f7b2
+
 from helpers import load_map, show_map
 import heapq
 from math import sqrt, sin, cos, sqrt, atan2, radians
@@ -66,7 +70,6 @@ def create_path(current_intersection):
 def shortest_path(graph, start, goal):
 
     start_node = Node(None, start)
-    goal_node = Node(None, goal)
 
     frontier = [start_node]                                         # init frontier with start node
     explored = [False for _ in range(len(graph.intersections)+1)]   # init explored
@@ -78,14 +81,14 @@ def shortest_path(graph, start, goal):
         current_intersection = heapq.heappop(frontier)              # pop off vertex with least f
         explored[current_intersection.position] = True              # mark explored
 
-        if current_intersection == goal:                            # if goal...
-            return create_path(current_intersection)                #...create path & return it
+        if current_intersection.position == goal:                   # if goal...
+            return create_path(current_intersection)                # ...create path & return it
 
         current_coordinates = graph.intersections[current_intersection.position]  # grab its coordinates
 
         for neighbour in graph.roads[current_intersection.position]:              # for each neighbour
 
-            if explored[neighbour]:                                 # if explored, move to next
+            if explored[neighbour]:                                 # if already explored, move to next
                 continue
 
             neighbour_coordinates = graph.intersections[neighbour]  # grab neighbour coordinates
@@ -93,26 +96,18 @@ def shortest_path(graph, start, goal):
             neighbour_node = Node(current_intersection, neighbour)  # Create a node for the neighbour
             neighbour_node.g = current_intersection.g + calc_cost(current_coordinates, neighbour_coordinates)  # calc g cost
             neighbour_node.h = euclidean_distance(neighbour_coordinates, goal_coordinates)
-            neighbour_node.f = neighbour.g + neighbour.h
+            neighbour_node.f = neighbour_node.g + neighbour_node.h
 
-            if neighbour_node in frontier:              # neighbour in frontier
-                """
-                If it is on the open list already, check to see if this path to that square is better, 
-                using G cost as the measure. A lower G cost means that this is a better path. If so, 
-                change the parent of the square to the current square, and recalculate the G and F 
-                scores of the square. If you are keeping your open list sorted by F score, you may need 
-                to resort the list to account for the change.
-                """
+            if neighbour_node in frontier:                          # neighbour in frontier
+                new_g = current_intersection.g + neighbour_node.g
+                if neighbour_node.g > new_g:
+                    neighbour_node.g = new_g
                 continue
 
-            heapq.heappush(frontier, neighbour_node)    # neighbour not in frontier, add it
+            heapq.heappush(frontier, neighbour_node)                # neighbour not in frontier, add it
 
     raise RuntimeError("No solution found")
 
 
 map_40 = load_map('map-40.pickle')
-
 path = shortest_path(map_40, 5, 34)             # [5, 16, 37, 12, 34]
-
-print(path)
-# show_map(map_40, start=5, goal=34, path=path)
