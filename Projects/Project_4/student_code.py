@@ -2,20 +2,20 @@
 # Ref. 2: https://medium.com/@nicholas.w.swift/easy-a-star-pathfinding-7e6689c7f7b2
 # Ref. 3: https://medium.com/@nicholas.w.swift/easy-a-star-pathfinding-7e6689c7f7b2
 
-from helpers import load_map, show_map
+from helpers import load_map, show_map, Map
 import heapq
 from math import sqrt, sin, cos, sqrt, atan2, radians
-import time
+from typing import List
 
 
 class Node:
     def __init__(self, parent=None, position=None):
-        self.parent = parent
-        self.position = position
+        self.parent = parent        # it's parent intersection
+        self.position = position    # intersection 'id'
 
-        self.g = 0
-        self.h = 0
-        self.f = 0
+        self.g = 0                  # dist: start -> point
+        self.h = 0                  # est. dist: point -> goal
+        self.f = 0                  # dist: (start -> point) + (est. dist point -> goal)
 
     def __eq__(self, other):
         return self.position == other.position
@@ -24,9 +24,10 @@ class Node:
         return self.f > other.f
 
 
-def euclidean_distance(neighbour, goal):
+def distance(neighbour: List[float], goal: List[float]) -> float:
     """
-    A heuristic function which calculates the Euclidean Distance
+    A heuristic function which calculates the Euclidean Distance between two points
+
     :param neighbour: coordinates of the neighbouring vertex
     :param goal: coordinates of the goal vertex
     :return: the euclidean distance
@@ -36,77 +37,69 @@ def euclidean_distance(neighbour, goal):
     return sqrt(((x1 - x2)**2) + ((y1 - y2)**2))
 
 
-def create_path(current_intersection):
+def create_path(goal_node: Node) -> List[int]:
     """
-    Work backwards from the target -> go from each child to its parent until you reach the start
+    Creates a path from the goal node to the start node
+
+    :param goal_node: goal node reached
+    :return: a list of ints which is the path
     """
     path = []
-    current = current_intersection
+    current = goal_node
     while current is not None:
         path.append(current.position)
         current = current.parent
-    return path[::-1]  # Return reversed path
+    return path[::-1]
 
 
-def shortest_path(graph, start, goal):
+def shortest_path(graph: Map, start: int, goal: int) -> List[int]:
+    """
+    Finds the shortest path between two points using the A* Search algorithm
 
-    start_node = Node(None, start)
+    :param graph: the graph to traverse
+    :param start: the starting intersection
+    :param goal: the goal intersection
+    :return: a list of integers representing the optimal intersections to go through
+    """
 
-    frontier = [start_node]                                         # init frontier with start node
-    explored = [False for _ in range(len(graph.intersections)+1)]   # init explored
+    start_node = Node(None, start)                                                # create the start node
 
-    goal_coordinates = graph.intersections[goal]                    # goal coordinates
+    frontier = [start_node]                                                       # init frontier with start node
+    explored = [False for _ in range(len(graph.intersections)+1)]                 # init explored
+
+    goal_coordinates = graph.intersections[goal]                                  # goal coordinates
 
     while frontier:
 
-        current_intersection = heapq.heappop(frontier)              # pop off vertex with least f
-        explored[current_intersection.position] = True              # mark explored
+        current_intersection = heapq.heappop(frontier)                            # pop off vertex with least f
+        explored[current_intersection.position] = True                            # mark explored
 
-        print('Current:', str(current_intersection.position),
-              '\t G:' + str(current_intersection.g),
-              '\t H:' + str(current_intersection.h),
-              '\t F:' + str(current_intersection.f) + '\n')
-
-        if current_intersection.position == goal:                   # if goal...
-            return create_path(current_intersection)                # ...create path & return it
+        if current_intersection.position == goal:                                 # if goal reached...
+            return create_path(current_intersection)                              # ...create path & return it
 
         current_coordinates = graph.intersections[current_intersection.position]  # grab its coordinates
 
         for neighbour in graph.roads[current_intersection.position]:              # for each neighbour
 
-            if explored[neighbour]:                                 # if already explored, move to next
+            if explored[neighbour]:                                               # if already explored, move to next
                 continue
 
-            neighbour_coordinates = graph.intersections[neighbour]  # grab neighbour coordinates
+            neighbour_coordinates = graph.intersections[neighbour]                # grab neighbour coordinates
+            neighbour_node = Node(current_intersection, neighbour)                # create neighbour node
 
-            neighbour_node = Node(current_intersection, neighbour)  # create neighbour node
-            neighbour_node.g = current_intersection.g + euclidean_distance(current_coordinates, neighbour_coordinates)  # calc g cost
-            neighbour_node.h = euclidean_distance(neighbour_coordinates, goal_coordinates)
+            neighbour_node.g = current_intersection.g + distance(current_coordinates, neighbour_coordinates)
+            neighbour_node.h = distance(neighbour_coordinates, goal_coordinates)
             neighbour_node.f = neighbour_node.g + neighbour_node.h
 
-            if neighbour_node in frontier:                          # neighbour in frontier
-                new_g = current_intersection.g + neighbour_node.g
-                if neighbour_node.g > new_g:
-                    neighbour_node.g = new_g
-                continue
+            if neighbour_node in frontier:                                        # neighbour in frontier
+                new_g = current_intersection.g + neighbour_node.g                 # calc new g
+                if neighbour_node.g > new_g:                                      # if new g < neighbours old g...
+                    neighbour_node.g = new_g                                      # ...update neighbours old g (better)
 
-            heapq.heappush(frontier, neighbour_node)                # neighbour not in frontier, add it
-
-            print('Neighbour:', str(neighbour),
-                  '\t G:' + str(neighbour_node.g),
-                  '\t H:' + str(neighbour_node.h),
-                  '\t F:' + str(neighbour_node.f) + '\t')
-
-            time.sleep(2)
-
-        print()
-        print('-'*20)
+            heapq.heappush(frontier, neighbour_node)                              # add neighbour to frontier
 
     raise RuntimeError("No solution found")
 
 
-map_40 = load_map('map-40.pickle')
-path = shortest_path(map_40, 8, 24)
-print()
-print('Path:', path, '\n')          # Should be: [8, 14, 16, 37, 12, 17, 10, 24]
-# show_map(map_40, 8, 24, path)     # Returning: [8, 30, 16, 37, 12, 17, 10, 24]
+# map_40 = load_map('map-40.pickle')
+# print('Path:', shortest_path(map_40, 8, 24), '\n')
