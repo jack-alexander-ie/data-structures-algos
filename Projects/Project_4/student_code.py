@@ -5,6 +5,7 @@
 from helpers import load_map, show_map
 import heapq
 from math import sqrt, sin, cos, sqrt, atan2, radians
+import time
 
 
 class Node:
@@ -40,7 +41,7 @@ def calc_cost(start_point, end_point):
     a = sin(dlat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dlon / 2) ** 2
     c = 2 * atan2(sqrt(a), sqrt(1 - a))
     distance = R * c
-    return int(distance)
+    return distance
 
 
 def euclidean_distance(neighbour, goal):
@@ -81,6 +82,11 @@ def shortest_path(graph, start, goal):
         current_intersection = heapq.heappop(frontier)              # pop off vertex with least f
         explored[current_intersection.position] = True              # mark explored
 
+        print('Current:', str(current_intersection.position),
+              '\t G:' + str(current_intersection.g),
+              '\t H:' + str(current_intersection.h),
+              '\t F:' + str(current_intersection.f) + '\n')
+
         if current_intersection.position == goal:                   # if goal...
             return create_path(current_intersection)                # ...create path & return it
 
@@ -95,7 +101,10 @@ def shortest_path(graph, start, goal):
 
             neighbour_node = Node(current_intersection, neighbour)  # Create a node for the neighbour
             neighbour_node.g = current_intersection.g + calc_cost(current_coordinates, neighbour_coordinates)  # calc g cost
+
             neighbour_node.h = euclidean_distance(neighbour_coordinates, goal_coordinates)
+            # neighbour_node.h = euclidean_distance(current_coordinates, neighbour_coordinates)
+
             neighbour_node.f = neighbour_node.g + neighbour_node.h
 
             if neighbour_node in frontier:                          # neighbour in frontier
@@ -106,8 +115,21 @@ def shortest_path(graph, start, goal):
 
             heapq.heappush(frontier, neighbour_node)                # neighbour not in frontier, add it
 
+            print('Neighbour:', str(neighbour),
+                  '\t G:' + str(neighbour_node.g),
+                  '\t H:' + str(neighbour_node.h),
+                  '\t F:' + str(neighbour_node.f) + '\t')
+
+            time.sleep(2)
+
+        print()
+        print('-'*20)
+
     raise RuntimeError("No solution found")
 
 
 map_40 = load_map('map-40.pickle')
-path = shortest_path(map_40, 5, 34)             # [5, 16, 37, 12, 34]
+path = shortest_path(map_40, 8, 24)
+print()
+print('Path:', path, '\n')          # Should be: [8, 14, 16, 37, 12, 17, 10, 24]
+# show_map(map_40, 8, 24, path)     # Returning: [8, 30, 16, 37, 12, 17, 10, 24]
