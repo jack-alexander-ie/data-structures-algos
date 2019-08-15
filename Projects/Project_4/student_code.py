@@ -51,12 +51,10 @@ def shortest_path(graph, start, goal):
 
     frontier = dict()                                               # init frontier - (cost, frontier)
     explored = [False for _ in range(len(graph.intersections)+1)]   # init explored
-
     frontier[start] = 0                                             # add the start to the set
     goal_coordinates = graph.intersections[goal]                    # goal coordinates
 
-    parents = dict()
-    parents[start] = start
+    parents = {}
 
     items = []                                                      # TODO: remove, debug only
 
@@ -65,11 +63,17 @@ def shortest_path(graph, start, goal):
         current_intersection = min(frontier.keys(), key=(lambda k: frontier[k]))    # grab vertex with least f
         current_cost = frontier[current_intersection]                               # grab cost
 
-        items.append(current_intersection)                          # TODO: remove, debug only
+        # items.append(current_intersection)                          # TODO: remove, debug only
 
         if current_intersection == goal:                            # if goal, create path & return it
             # return create_path(explored)
-            return items                                            # TODO: remove, debug only
+            # return items                                            # TODO: remove, debug only
+            """
+            Save the path. Working backwards from the target square, 
+            go from each square to its parent square until you reach 
+            the starting square. That is your path.
+            """
+            pass
 
         del frontier[current_intersection]                          # remove from frontier
         explored[current_intersection] = True                       # mark explored
@@ -82,16 +86,49 @@ def shortest_path(graph, start, goal):
                 continue
 
             neighbour_coordinates = graph.intersections[neighbour]  # grab neighbour coordinates
+
+            # G is the distance between the current node and the start node.
             neighbour_g = current_cost + calc_cost(current_coordinates, neighbour_coordinates)  # calc g cost
 
-            if neighbour in frontier:
-                new_g = current_cost + neighbour_g
-                if frontier[neighbour] > new_g:
-                    frontier[neighbour] = new_g
-            else:
+            if neighbour in frontier:                               # if neighbour is in the frontier
+
+                """
+                If in the open list: 
+                    1. Check to see if this path to that square is better, using G cost as the measure. 
+                       A lower G cost means that this is a better path. 
+                    2. If so: 
+                        2.1 change the parent of the square to the current square
+                        2.2 recalculate the G and F scores of the square  
+                    3. If you are keeping your open list sorted by F score, resort the list
+                """
+
+                new_neighbour_g = current_cost + neighbour_g        # cal the new g value
+
+                if frontier[neighbour] > new_neighbour_g:           # lower G cost means that this is a better path
+                    frontier[neighbour] = new_neighbour_g           # set new g as value
+                    parents[current_intersection] = neighbour
+
+            else:                                                   # if neighbour is not
+
+                """
+                If not in the open list: 
+    
+                    1. add it to the open list. 
+                    2. make the current square the parent of this square 
+                    3. record the F, G, and H costs of the square.
+                """
+
+                # H is the estimated distance from the current node to the end node.
                 neighbour_h = euclidean_distance(neighbour_coordinates, goal_coordinates)
+
+                # F is the total cost of the node
                 neighbour_f = neighbour_g + neighbour_h
+
+                # Add it to the frontier, along with its f cost
                 frontier[neighbour] = neighbour_f
+
+                # Make current square parent of neighbour square
+                parents[current_intersection] = neighbour
 
     raise RuntimeError("No solution found")
 
@@ -99,4 +136,6 @@ def shortest_path(graph, start, goal):
 map_40 = load_map('map-40.pickle')
 
 path = shortest_path(map_40, 5, 34)             # [5, 16, 37, 12, 34]
-show_map(map_40, start=5, goal=34, path=path)
+
+print(path)
+# show_map(map_40, start=5, goal=34, path=path)
