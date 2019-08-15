@@ -24,26 +24,6 @@ class Node:
         return self.f > other.f
 
 
-def calc_cost(start_point, end_point):
-    """
-    Helper function to calculate the distance between two points.
-    Ref. from https://stackoverflow.com/questions/19412462/getting-distance-between-two-points-based-on-latitude-longitude/43211266#43211266
-
-    :param start_point: the coordinates of the start point
-    :param end_point: the coordinated of the end point
-    :return: the distance in km between two points
-    """
-    R = 6373.0                                      # approx. radius of earth in km
-    lat1, lon1 = start_point[0], start_point[1]     # unpack start coordinates
-    lat2, lon2 = end_point[0], end_point[1]         # unpack end coordinates
-    dlon = lon2 - lon1
-    dlat = lat2 - lat1
-    a = sin(dlat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dlon / 2) ** 2
-    c = 2 * atan2(sqrt(a), sqrt(1 - a))
-    distance = R * c
-    return distance
-
-
 def euclidean_distance(neighbour, goal):
     """
     A heuristic function which calculates the Euclidean Distance
@@ -99,12 +79,9 @@ def shortest_path(graph, start, goal):
 
             neighbour_coordinates = graph.intersections[neighbour]  # grab neighbour coordinates
 
-            neighbour_node = Node(current_intersection, neighbour)  # Create a node for the neighbour
-            neighbour_node.g = current_intersection.g + calc_cost(current_coordinates, neighbour_coordinates)  # calc g cost
-
+            neighbour_node = Node(current_intersection, neighbour)  # create neighbour node
+            neighbour_node.g = current_intersection.g + euclidean_distance(current_coordinates, neighbour_coordinates)  # calc g cost
             neighbour_node.h = euclidean_distance(neighbour_coordinates, goal_coordinates)
-            # neighbour_node.h = euclidean_distance(current_coordinates, neighbour_coordinates)
-
             neighbour_node.f = neighbour_node.g + neighbour_node.h
 
             if neighbour_node in frontier:                          # neighbour in frontier
