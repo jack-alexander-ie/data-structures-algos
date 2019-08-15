@@ -3,9 +3,25 @@ import heapq
 from math import sqrt, sin, cos, sqrt, atan2, radians
 
 
+class Node:
+    def __init__(self, parent=None, position=None):
+        self.parent = parent
+        self.position = position
+
+        self.g = 0
+        self.h = 0
+        self.f = 0
+
+    def __eq__(self, other):
+        return self.position == other.position
+
+    def __gt__(self, other):
+        return self.f > other.f
+
+
 def calc_cost(start_point, end_point):
     """
-    Helper function to calculate the dostance between two points.
+    Helper function to calculate the distance between two points.
     Ref. from https://stackoverflow.com/questions/19412462/getting-distance-between-two-points-based-on-latitude-longitude/43211266#43211266
 
     :param start_point: the coordinates of the start point
@@ -35,100 +51,61 @@ def euclidean_distance(neighbour, goal):
     return sqrt(((x1 - x2)**2) + ((y1 - y2)**2))
 
 
-def create_path(explored):
-
-    return explored.keys()
-
-    optimal_path = list()
-    while current.parent:
-        optimal_path.append(current)
+def create_path(current_intersection):
+    """
+    Work backwards from the target -> go from each child to its parent until you reach the start
+    """
+    path = []
+    current = current_intersection
+    while current is not None:
+        path.append(current.position)
         current = current.parent
-    optimal_path.append(current)
-    return optimal_path[::-1]
+    return path[::-1]  # Return reversed path
 
 
 def shortest_path(graph, start, goal):
 
-    frontier = dict()                                               # init frontier - (cost, frontier)
+    start_node = Node(None, start)
+    goal_node = Node(None, goal)
+
+    frontier = [start_node]                                         # init frontier with start node
     explored = [False for _ in range(len(graph.intersections)+1)]   # init explored
-    frontier[start] = 0                                             # add the start to the set
+
     goal_coordinates = graph.intersections[goal]                    # goal coordinates
-
-    parents = {}
-
-    items = []                                                      # TODO: remove, debug only
 
     while frontier:
 
-        current_intersection = min(frontier.keys(), key=(lambda k: frontier[k]))    # grab vertex with least f
-        current_cost = frontier[current_intersection]                               # grab cost
+        current_intersection = heapq.heappop(frontier)              # pop off vertex with least f
+        explored[current_intersection.position] = True              # mark explored
 
-        # items.append(current_intersection)                          # TODO: remove, debug only
+        if current_intersection == goal:                            # if goal...
+            return create_path(current_intersection)                #...create path & return it
 
-        if current_intersection == goal:                            # if goal, create path & return it
-            # return create_path(explored)
-            # return items                                            # TODO: remove, debug only
-            """
-            Save the path. Working backwards from the target square, 
-            go from each square to its parent square until you reach 
-            the starting square. That is your path.
-            """
-            pass
+        current_coordinates = graph.intersections[current_intersection.position]  # grab its coordinates
 
-        del frontier[current_intersection]                          # remove from frontier
-        explored[current_intersection] = True                       # mark explored
-
-        current_coordinates = graph.intersections[current_intersection]  # grab its coordinates
-
-        for neighbour in graph.roads[current_intersection]:         # for each neighbour
+        for neighbour in graph.roads[current_intersection.position]:              # for each neighbour
 
             if explored[neighbour]:                                 # if explored, move to next
                 continue
 
             neighbour_coordinates = graph.intersections[neighbour]  # grab neighbour coordinates
 
-            # G is the distance between the current node and the start node.
-            neighbour_g = current_cost + calc_cost(current_coordinates, neighbour_coordinates)  # calc g cost
+            neighbour_node = Node(current_intersection, neighbour)  # Create a node for the neighbour
+            neighbour_node.g = current_intersection.g + calc_cost(current_coordinates, neighbour_coordinates)  # calc g cost
+            neighbour_node.h = euclidean_distance(neighbour_coordinates, goal_coordinates)
+            neighbour_node.f = neighbour.g + neighbour.h
 
-            if neighbour in frontier:                               # if neighbour is in the frontier
-
+            if neighbour_node in frontier:              # neighbour in frontier
                 """
-                If in the open list: 
-                    1. Check to see if this path to that square is better, using G cost as the measure. 
-                       A lower G cost means that this is a better path. 
-                    2. If so: 
-                        2.1 change the parent of the square to the current square
-                        2.2 recalculate the G and F scores of the square  
-                    3. If you are keeping your open list sorted by F score, resort the list
+                If it is on the open list already, check to see if this path to that square is better, 
+                using G cost as the measure. A lower G cost means that this is a better path. If so, 
+                change the parent of the square to the current square, and recalculate the G and F 
+                scores of the square. If you are keeping your open list sorted by F score, you may need 
+                to resort the list to account for the change.
                 """
+                continue
 
-                new_neighbour_g = current_cost + neighbour_g        # cal the new g value
-
-                if frontier[neighbour] > new_neighbour_g:           # lower G cost means that this is a better path
-                    frontier[neighbour] = new_neighbour_g           # set new g as value
-                    parents[current_intersection] = neighbour
-
-            else:                                                   # if neighbour is not
-
-                """
-                If not in the open list: 
-    
-                    1. add it to the open list. 
-                    2. make the current square the parent of this square 
-                    3. record the F, G, and H costs of the square.
-                """
-
-                # H is the estimated distance from the current node to the end node.
-                neighbour_h = euclidean_distance(neighbour_coordinates, goal_coordinates)
-
-                # F is the total cost of the node
-                neighbour_f = neighbour_g + neighbour_h
-
-                # Add it to the frontier, along with its f cost
-                frontier[neighbour] = neighbour_f
-
-                # Make current square parent of neighbour square
-                parents[current_intersection] = neighbour
+            heapq.heappush(frontier, neighbour_node)    # neighbour not in frontier, add it
 
     raise RuntimeError("No solution found")
 
