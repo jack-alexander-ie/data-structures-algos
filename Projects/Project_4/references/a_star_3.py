@@ -51,7 +51,7 @@ class Graph:
             # find a node with the lowest value of f() - evaluation function
             for v in open_list:
                 if n == None or g[v] + self.h(v) < g[n] + self.h(n):
-                    n = v;
+                    n = v
 
             if n == None:
                 print('Path does not exist!')
