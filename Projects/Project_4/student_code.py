@@ -101,5 +101,7 @@ def shortest_path(graph: Map, start: int, goal: int) -> List[int]:
     raise RuntimeError("No solution found")
 
 
-# map_40 = load_map('map-40.pickle')
-# print('Path:', shortest_path(map_40, 8, 24), '\n')
+map_40 = load_map('map-40.pickle')
+print('Path:', shortest_path(map_40, 5, 34), '\n')      # [5, 16, 37, 12, 34]
+print('Path:', shortest_path(map_40, 5, 5), '\n')       # [5]
+print('Path:', shortest_path(map_40, 8, 24), '\n')      # [8, 14, 16, 37, 12, 17, 10, 24]
