@@ -1,5 +1,5 @@
-# Ref. 1: https://gist.github.com/jamiees2/5531924
-# Ref. 2: https://medium.com/@nicholas.w.swift/easy-a-star-pathfinding-7e6689c7f7b2
+# Reference 1: https://gist.github.com/jamiees2/5531924
+# Reference 2: https://medium.com/@nicholas.w.swift/easy-a-star-pathfinding-7e6689c7f7b2
 
 from helpers import load_map, show_map, Map
 from math import sqrt, sin, cos, sqrt, atan2, radians
@@ -65,9 +65,6 @@ def shortest_path(graph: Map, start: int, goal: int) -> List[int]:
 
     start_node = Node(None, start)                                                # create the start node
 
-    # frontier = set()                                                              # init the frontier
-    # frontier.add(start_node)                                                      # add the start node
-
     frontier = dict()                                                             # init the frontier
     frontier[start] = start_node                                                  # add the start start node
 
@@ -77,20 +74,8 @@ def shortest_path(graph: Map, start: int, goal: int) -> List[int]:
 
     while frontier:
 
-        print('Frontier:', sorted(frontier.keys()), '\n')
-
-        # current_intersection = min(frontier, key=lambda o: o.f)                   # grab vertex with least f
-        # frontier.remove(current_intersection)                                     # remove it from the frontier
-
         current_intersection = sorted(frontier.values())[0]                       # grab vertex with least f
         del frontier[current_intersection.position]                               # remove it from the frontier
-
-        print('Current:', current_intersection.position,
-              '\t F:', str(current_intersection.f),
-              '\t G:', str(current_intersection.g),
-              '\t H:', str(current_intersection.h), '\n')
-
-        print('Neighbours:', graph.roads[current_intersection.position], '\n')
 
         explored[current_intersection.position] = True                            # mark as explored
 
@@ -109,16 +94,9 @@ def shortest_path(graph: Map, start: int, goal: int) -> List[int]:
             new_g_score = current_intersection.g + distance(current_coordinates, neighbour_coordinates)  # calc new g
 
             if neighbour in frontier:                                             # neighbour in frontier
-                # print(frontier[neighbour])
-                # if new_g_score < frontier[neighbour].g:                           # if new g < neighbours old g...
-                #     print('---- UPDATED G VALUE ----')
-                #     neighbour_node.g = new_g_score                                # ...update old g (better path)
-
                 if new_g_score < frontier[neighbour].g:                           # if new g < neighbours old g...
-                    print()
-                    print('\t\tUPDATING G VALUE:', neighbour, '\n')
                     frontier[neighbour].g = new_g_score                           # ...update old g (better path)
-                    frontier[neighbour].parent = current_intersection
+                    frontier[neighbour].parent = current_intersection             # update its parent
                 continue
 
             neighbour_node = Node(current_intersection, neighbour)  # create neighbour node
@@ -126,24 +104,6 @@ def shortest_path(graph: Map, start: int, goal: int) -> List[int]:
             neighbour_node.h = distance(neighbour_coordinates, goal_coordinates)
             neighbour_node.f = new_g_score + neighbour_node.h
 
-            # frontier.add(neighbour_node)                                          # add neighbour to frontier
-            frontier[neighbour] = neighbour_node
-
-            print('Neighbour:', neighbour_node.position,
-                  '\t F:', str(neighbour_node.f),
-                  '\t G:', str(neighbour_node.g),
-                  '\t H:', str(neighbour_node.h))
-        print()
-        print('-'*20, '\n')
+            frontier[neighbour] = neighbour_node                                # add neighbour to frontier
 
     raise RuntimeError("No solution found")
-
-
-print()
-map_40 = load_map('map-40.pickle')
-# print('Path:', shortest_path(map_40, 5, 34), '\n')      # Correct Answer: [5, 16, 37, 12, 34]
-# print('Path:', shortest_path(map_40, 5, 5), '\n')       # Correct Answer: [5]
-print('Path:', shortest_path(map_40, 8, 24), '\n')      # Correct Answer: [8, 14, 16, 37, 12, 17, 10, 24]
-
-# show_map(M, start=None, goal=None, path=None):
-# show_map(map_40, 8, 24, shortest_path(map_40, 8, 24))
